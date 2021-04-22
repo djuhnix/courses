@@ -1,6 +1,19 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'org.hsqldb', name: 'hsqldb', version: gradle.hsqldbVersion
+    }
+}
+
 plugins {
     id 'application'
 }
+apply from: 'HSQLDB.gradle'
+
 
 group 'courses.server'
 
