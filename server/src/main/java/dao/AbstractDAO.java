@@ -10,13 +10,22 @@ import java.util.List;
  */
 public abstract class AbstractDAO<T> {
 
-    private EntityManager em;
+    protected EntityManager em;
+
     protected AbstractDAO() {
         em = DefaultEntityManager.getInstance().getEntityManager();
     }
 
     public abstract List<T> findAll();
     public abstract T findById(int id);
+
+    public void save(T entityObject) {
+        em.persist(entityObject);
+    }
+
+    public void delete(T entityObject) {
+        em.remove(entityObject);
+    }
 
     //findBy
 }

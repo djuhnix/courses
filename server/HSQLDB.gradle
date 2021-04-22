@@ -71,7 +71,10 @@ task createDatabaseTable() {
         //noinspection GroovyAssignabilityCheck
         Sql sql = getSQLInstance()
         // TODO create database statement
-        //sql.execute('CREATE;')
+        String sqlDir = project.properties['sqlDir'] ?: gradle.sqlDir
+        fileTree(dir: sqlDir, include: "**.sql", exclude: [/* files to exclude here */]).each {
+            sql.execute(it.text)
+        }
         sql.close()
     }
 }
@@ -87,7 +90,7 @@ Sql getSQLInstance() {
         loader.addURL(file.toURI().toURL())
     }
     //noinspection GroovyAssignabilityCheck
-    return Sql.newInstance(dbUrl, dbUser, dbPassword, dbDrive) as Sql
+    return Sql.newInstance(dbUrl, dbUser, dbPassword, dbDrive, allowMultiQueries: 'true') as Sql
 }
 
 boolean available() {
