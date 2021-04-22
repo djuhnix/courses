@@ -5,10 +5,10 @@ include 'client'
 //// database
 
 //lib version
-gradle.ext.hsqldbVersion = '2.3.2'
+gradle.ext.hsqldbVersion = '2.6.0'
 //default database config
 gradle.ext.dbName = "courses"
-gradle.ext.dbFile = "server/database/mooddb"
+gradle.ext.dbFile = "database/mooddb"
 gradle.ext.dbUser = "SA"
 gradle.ext.dbPassword = ""
 gradle.ext.dbPort = 9001
