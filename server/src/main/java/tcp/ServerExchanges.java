@@ -1,5 +1,4 @@
 package tcp;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -79,9 +78,8 @@ public class ServerExchanges {
                 }
             }
 
-        } catch (IOException e) {
-            System.out.println(e);
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
         System.out.println("Sever stopped!");
     }
