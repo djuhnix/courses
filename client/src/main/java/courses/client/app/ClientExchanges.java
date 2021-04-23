@@ -24,6 +24,7 @@ public class ClientExchanges{
             e.printStackTrace();
         }
 
+    public ClientExchanges(String[] json){
 
         //Object[] array ={test};
         //String[] res = sendSocket(array);
@@ -41,7 +42,6 @@ public class ClientExchanges{
 
             // Create output stream at the client (to send data to the server)
             os = new BufferedWriter(new OutputStreamWriter(socketOfClient.getOutputStream()));
-
 
             // Input stream at Client (Receive data from the server).
             is = new BufferedReader(new InputStreamReader(socketOfClient.getInputStream()));
@@ -63,8 +63,8 @@ public class ClientExchanges{
                 // Write data to the output stream of the Client Socket.
                 os.write(stringValue);
 
-            // End of line
-            os.newLine();
+                // End of line
+                os.newLine();
 
             // Flush data.
             os.flush();
