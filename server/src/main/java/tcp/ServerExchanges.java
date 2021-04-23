@@ -1,10 +1,10 @@
 package tcp;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import entities.*;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -15,56 +15,30 @@ public class ServerExchanges {
     public static void main(String args[]) throws IOException {
 
         ServerSocket listener = null;
+        String line;
+        BufferedReader br;
+        BufferedWriter bw;
+        Socket socketOfServer = null;
 
-        System.out.println("Server is waiting to accept user...");
-        int clientNumber = 0;
-
-        // Try to open a server socket on port 7777
+        // Try to open a server socket on port 9999
         // Note that we can't choose a port less than 1023 if we are not
         // privileged users (root)
 
+
         try {
-            listener = new ServerSocket(7777);
+            listener = new ServerSocket(1024);
         } catch (IOException e) {
             System.out.println(e);
             System.exit(1);
         }
 
         try {
-            while (true) {
-                // Accept client connection request
-                // Get new Socket at Server.
+            System.out.println("Server is waiting to accept user...");
 
-                Socket socketOfServer = listener.accept();
-                new ServiceThread(socketOfServer, clientNumber++).start();
-            }
-        } finally {
-            listener.close();
-        }
-
-    }
-
-    private static void log(String message) {
-        System.out.println(message);
-    }
-
-    private static class ServiceThread extends Thread {
-
-        private int clientNumber;
-        private Socket socketOfServer;
-
-        public ServiceThread(Socket socketOfServer, int clientNumber) {
-            this.clientNumber = clientNumber;
-            this.socketOfServer = socketOfServer;
-
-            // Log
-            log("New connection with client# " + this.clientNumber + " at " + socketOfServer);
-        }
-
-        @Override
-        public void run() {
-
-            try {
+            // Accept client connection request
+            // Get new Socket at Server.
+            socketOfServer = listener.accept();
+            System.out.println("Accept a client!");
 
                 // Open input and output streams
 
@@ -87,27 +61,28 @@ public class ServerExchanges {
                 //call functions to process data received
                 //TODO
 
-                Object[] ObjectsToSend = new Object[0];
-                String stringValue;
-                for (Object value : ObjectsToSend) {
+                // Write to socket of Server
+                // (Send to client)
+                bw.write(">> " + line);
+                // End of line
+                bw.newLine();
+                // Flush data.
+                bw.flush();
 
-                    stringValue = testJackson.objectToJson(value);
-                    // Write data to the output stream of the Client Socket.
-                    os.write(stringValue);
 
-                    // End of line
-                    os.newLine();
-
-                    // Flush data.
-                    os.flush();
+                // If users send QUIT (To end conversation).
+                if (line.equals("QUIT")) {
+                    bw.write(">> OK");
+                    bw.newLine();
+                    bw.flush();
+                    break;
                 }
-                os.write("end");
-                os.newLine();
-                os.flush();
-
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
             }
+
+        } catch (IOException e) {
+            System.out.println(e);
+            e.printStackTrace();
         }
+        System.out.println("Sever stopped!");
     }
 }
