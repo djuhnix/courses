@@ -2,9 +2,9 @@ package courses.client.app;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class testJackson {
     public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class testJackson {
     }
 
     public static String objectToJson(Object obj) {
-        ObjectWriter mapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        ObjectMapper mapper = new ObjectMapper();
         String json = null;
         try {
             json = mapper.writeValueAsString(obj);
