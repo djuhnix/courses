@@ -1,3 +1,9 @@
+buildscript {
+    dependencies {
+        classpath group: 'org.hsqldb', name: 'hsqldb', version: gradle.hsqldbVersion
+    }
+}
+
 plugins {
     id 'application'
 }
@@ -13,7 +19,6 @@ dependencies {
     implementation group: 'org.eclipse.persistence', name: 'jakarta.persistence', version: '2.2.3'
     implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.0.0'
     implementation group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.8'
-    implementation group: 'org.hsqldb', name: 'hsqldb', version: gradle.hsqldbVersion
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }

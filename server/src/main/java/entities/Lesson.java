@@ -1,10 +1,10 @@
 package entities;
 
-public class lesson {
+public class Lesson {
     Activity activity;
     private String filePath;
 
-    public lesson(Activity activity, String filePath) {
+    public Lesson(Activity activity, String filePath) {
         this.activity = activity;
         this.filePath = filePath;
     }
