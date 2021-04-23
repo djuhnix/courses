@@ -1,5 +1,7 @@
 package entities;
 
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
@@ -19,7 +21,8 @@ public class User {
     private String adresse2;
     private String ville;
     private String cp;
-
+    private String nom;
+    private String prenom;
 
     public User() {
     }
@@ -35,6 +38,13 @@ public class User {
         this.cp = cp;
     }
 
+    public User setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    @Id
+    @Column(name = "ID", nullable = false)
     public Integer getId() {
         return id;
     }
@@ -44,6 +54,8 @@ public class User {
         return this;
     }
 
+    @Basic
+    @Column(name = "EMAIL", nullable = false, length = 50)
     public String getEmail() {
         return email;
     }
@@ -80,6 +92,8 @@ public class User {
         return this;
     }
 
+    @Basic
+    @Column(name = "TELEPHONE", nullable = false, length = 25)
     public String getTelephone() {
         return telephone;
     }
@@ -89,6 +103,8 @@ public class User {
         return this;
     }
 
+    @Basic
+    @Column(name = "ADRESSE1", nullable = false, length = 25)
     public String getAdresse1() {
         return adresse1;
     }
@@ -98,6 +114,8 @@ public class User {
         return this;
     }
 
+    @Basic
+    @Column(name = "ADRESSE2", nullable = true, length = 25)
     public String getAdresse2() {
         return adresse2;
     }
@@ -107,6 +125,8 @@ public class User {
         return this;
     }
 
+    @Basic
+    @Column(name = "VILLE", nullable = false, length = 25)
     public String getVille() {
         return ville;
     }
@@ -116,6 +136,8 @@ public class User {
         return this;
     }
 
+    @Basic
+    @Column(name = "CP", nullable = false, length = 25)
     public String getCp() {
         return cp;
     }
@@ -123,5 +145,61 @@ public class User {
     public User setCp(String cp) {
         this.cp = cp;
         return this;
+    }
+
+    @Basic
+    @Column(name = "NOM", nullable = false, length = 25)
+    public String getNom() {
+        return nom;
+    }
+
+    public User setNom(String nom) {
+        this.nom = nom;
+        return this;
+    }
+
+    @Basic
+    @Column(name = "PRENOM", nullable = false, length = 25)
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public User setPrenom(String prenom) {
+        this.prenom = prenom;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (telephone != null ? !telephone.equals(user.telephone) : user.telephone != null) return false;
+        if (adresse1 != null ? !adresse1.equals(user.adresse1) : user.adresse1 != null) return false;
+        if (adresse2 != null ? !adresse2.equals(user.adresse2) : user.adresse2 != null) return false;
+        if (ville != null ? !ville.equals(user.ville) : user.ville != null) return false;
+        if (cp != null ? !cp.equals(user.cp) : user.cp != null) return false;
+        if (nom != null ? !nom.equals(user.nom) : user.nom != null) return false;
+        if (prenom != null ? !prenom.equals(user.prenom) : user.prenom != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (nom != null ? nom.hashCode() : 0);
+        result = 31 * result + (prenom != null ? prenom.hashCode() : 0);
+        result = 31 * result + (telephone != null ? telephone.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (adresse1 != null ? adresse1.hashCode() : 0);
+        result = 31 * result + (adresse2 != null ? adresse2.hashCode() : 0);
+        result = 31 * result + (ville != null ? ville.hashCode() : 0);
+        result = 31 * result + (cp != null ? cp.hashCode() : 0);
+        return result;
     }
 }
