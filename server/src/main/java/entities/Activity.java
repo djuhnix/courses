@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,6 +27,8 @@ public class Activity {
 
     @ManyToOne
     private Teacher teacher;
+    @OneToMany(mappedBy = "activity")
+    private List<Graduation> graduations;
 
     @Basic @Column(name = "ID_PROMOTION", nullable = false)
     private int idPromotion;
