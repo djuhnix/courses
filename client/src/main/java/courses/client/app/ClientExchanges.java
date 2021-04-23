@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class ClientExchanges {
 
-    public static void main(String[] args) {
+    public ClientExchanges(String[] json){
 
 
         final String serverHost = "localhost";
@@ -15,15 +15,12 @@ public class ClientExchanges {
         BufferedReader is = null;
 
         try {
-
-
             // Send a request to connect to the server is listening
             // on machine 'localhost' port 7777.
             socketOfClient = new Socket(serverHost, 7777);
 
             // Create output stream at the client (to send data to the server)
             os = new BufferedWriter(new OutputStreamWriter(socketOfClient.getOutputStream()));
-
 
             // Input stream at Client (Receive data from the server).
             is = new BufferedReader(new InputStreamReader(socketOfClient.getInputStream()));
@@ -37,36 +34,26 @@ public class ClientExchanges {
         }
 
         try {
+            for( String value : json ) {
+                // Write data to the output stream of the Client Socket.
+                os.write(value);
 
-            // Write data to the output stream of the Client Socket.
-            os.write("HELO! now is " + new Date());
+                // End of line
+                os.newLine();
 
-            // End of line
-            os.newLine();
-
-            // Flush data.
-            os.flush();
-            os.write("envoie de données");
-            os.newLine();
-            os.flush();
-            os.write("donnée1");
+                // Flush data.
+                os.flush();
+            }
+            os.write("end");
             os.newLine();
             os.flush();
-            os.write("donnée2");
-            os.newLine();
-            os.flush();
-            os.write("fin");
-            os.newLine();
-            os.flush();
-
-
 
             // Read data sent from the server.
             // By reading the input stream of the Client Socket.
             String responseLine;
             while ((responseLine = is.readLine()) != null) {
                 System.out.println("Server: " + responseLine);
-                if (responseLine.indexOf(">> les données ont été completement traitées") != -1) {
+                if (responseLine.indexOf("end") != -1) {
                     break;
                 }
             }
