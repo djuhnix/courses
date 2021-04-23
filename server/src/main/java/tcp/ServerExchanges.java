@@ -1,4 +1,8 @@
 package tcp;
+<<<<<<< HEAD
+=======
+
+>>>>>>> échanges entre serveur et client.
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;

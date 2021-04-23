@@ -26,6 +26,10 @@ public class ClientExchanges {
             // Create output stream at the client (to send data to the server)
             os = new BufferedWriter(new OutputStreamWriter(socketOfClient.getOutputStream()));
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> échanges entre serveur et client.
             // Input stream at Client (Receive data from the server).
             is = new BufferedReader(new InputStreamReader(socketOfClient.getInputStream()));
 
