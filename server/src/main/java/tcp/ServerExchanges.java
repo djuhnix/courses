@@ -1,5 +1,4 @@
 package tcp;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -7,7 +6,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.util.List;
+import java.util.ArrayList;
 
 public class ServerExchanges {
 
@@ -68,37 +68,42 @@ public class ServerExchanges {
                 // Open input and output streams
                 BufferedReader is = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
                 BufferedWriter os = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
-
+                List<Object> dataReceived = new ArrayList<>();
+                //put all the Strings received from the client and transform them into Objects
+                //save all the objects into an array
                 while (true) {
-                    // Read data to the server (sent from client).
                     String line = is.readLine();
-                    log(line);
-                    // Write to socket of Server
-                    // (Send to client)
-                    os.write("donnée " + line +" recue");
-                    // End of line.
-                    os.newLine();
-                    // Flush data.
-                    os.flush();
-
-                    if (line.equals("envoie de données")) {
-                        log("Reception de données d'un client");
-                        os.write(">> les données ont été recues");
-                        os.newLine();
-                        os.flush();
-                    }
-                    // If users send QUIT (To end conversation).
-                    if (line.equals("fin")) {
-                        os.write(">> les données ont été completement traitées");
-                        os.newLine();
-                        os.flush();
+                    if (line.equals("end")) {
                         break;
+                    } else {
+                        dataReceived.add(testJackson.jsonToObject(line));
                     }
                 }
+                dataReceived.toArray(new Object[dataReceived.size()]);
 
-            } catch (IOException e) {
-                System.out.println(e);
-                e.printStackTrace();
+                //call functions to process data received
+                //TODO
+
+                Object[] ObjectsToSend = new Object[0];
+                String stringValue;
+                for (Object value : ObjectsToSend) {
+
+                    stringValue = testJackson.objectToJson(value);
+                    // Write data to the output stream of the Client Socket.
+                    os.write(stringValue);
+
+                    // End of line
+                    os.newLine();
+
+                    // Flush data.
+                    os.flush();
+                }
+                os.write("end");
+                os.newLine();
+                os.flush();
+
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             }
         }
     }

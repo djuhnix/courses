@@ -1,18 +1,22 @@
 package courses.client.app;
 import java.io.*;
 import java.net.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientExchanges {
+    final static String serverHost = "localhost";
+    public static void main(String args[]){
+        testToJsonClass test= new testToJsonClass();
+        Object[] array ={test};
+        String[] res = sendSocket(array);
+    }
 
-    public ClientExchanges(String[] json){
-
-
-        final String serverHost = "localhost";
-
+    public static String[] sendSocket(Object[] ObjectsToSend){
         Socket socketOfClient = null;
         BufferedWriter os = null;
         BufferedReader is = null;
+        List<String> dataReceived = new ArrayList<String>();
 
         try {
             // Send a request to connect to the server is listening
@@ -27,16 +31,17 @@ public class ClientExchanges {
 
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + serverHost);
-            return;
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " + serverHost);
-            return;
         }
 
         try {
-            for( String value : json ) {
+            String stringValue;
+            for( Object value : ObjectsToSend ) {
+
+                stringValue = testJackson.objectToJson(value);
                 // Write data to the output stream of the Client Socket.
-                os.write(value);
+                os.write(stringValue);
 
                 // End of line
                 os.newLine();
@@ -50,9 +55,11 @@ public class ClientExchanges {
 
             // Read data sent from the server.
             // By reading the input stream of the Client Socket.
+
             String responseLine;
             while ((responseLine = is.readLine()) != null) {
                 System.out.println("Server: " + responseLine);
+                dataReceived.add(responseLine);
                 if (responseLine.indexOf("end") != -1) {
                     break;
                 }
@@ -67,5 +74,6 @@ public class ClientExchanges {
         } catch (IOException e) {
             System.err.println("IOException:  " + e);
         }
+        return dataReceived.toArray(new String[dataReceived.size()]);
     }
 }
