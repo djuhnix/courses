@@ -14,6 +14,9 @@ public class Promotion {
     @OneToMany(mappedBy = "promotion")
     private List<Activity> activities;
 
+    @OneToMany(mappedBy = "promotion")
+    private List<Student> students;
+
     @Basic @Column(name = "FORMATION", nullable = false)
     private String formation;
 

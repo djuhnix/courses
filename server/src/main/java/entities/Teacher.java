@@ -8,8 +8,9 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@DiscriminatorValue("teacher")
 @Data
-public class Teacher extends User{
+public class Teacher extends User {
     @Id @Column(name = "ID", nullable = false)
     private int id;
 
