@@ -11,65 +11,95 @@ import java.net.Socket;
 
 public class ServerExchanges {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
 
         ServerSocket listener = null;
-        String line;
-        BufferedReader br;
-        BufferedWriter bw;
-        Socket socketOfServer = null;
 
-        // Try to open a server socket on port 9999
+        System.out.println("Server is waiting to accept user...");
+        int clientNumber = 0;
+
+        // Try to open a server socket on port 7777
         // Note that we can't choose a port less than 1023 if we are not
         // privileged users (root)
 
-
         try {
-            listener = new ServerSocket(1024);
+            listener = new ServerSocket(7777);
         } catch (IOException e) {
             System.out.println(e);
             System.exit(1);
         }
 
         try {
-            System.out.println("Server is waiting to accept user...");
-
-            // Accept client connection request
-            // Get new Socket at Server.
-            socketOfServer = listener.accept();
-            System.out.println("Accept a client!");
-
-            // Open input and output streams
-            br = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
-            bw = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
-
-
             while (true) {
-                // Read data to the server (sent from client).
-                line = br.readLine();
+                // Accept client connection request
+                // Get new Socket at Server.
 
-                // Write to socket of Server
-                // (Send to client)
-                bw.write(">> " + line);
-                // End of line
-                bw.newLine();
-                // Flush data.
-                bw.flush();
-
-
-                // If users send QUIT (To end conversation).
-                if (line.equals("QUIT")) {
-                    bw.write(">> OK");
-                    bw.newLine();
-                    bw.flush();
-                    break;
-                }
+                Socket socketOfServer = listener.accept();
+                new ServiceThread(socketOfServer, clientNumber++).start();
             }
-
-        } catch (IOException e) {
-            System.out.println(e);
-            e.printStackTrace();
+        } finally {
+            listener.close();
         }
-        System.out.println("Sever stopped!");
+
+    }
+
+    private static void log(String message) {
+        System.out.println(message);
+    }
+
+    private static class ServiceThread extends Thread {
+
+        private int clientNumber;
+        private Socket socketOfServer;
+
+        public ServiceThread(Socket socketOfServer, int clientNumber) {
+            this.clientNumber = clientNumber;
+            this.socketOfServer = socketOfServer;
+
+            // Log
+            log("New connection with client# " + this.clientNumber + " at " + socketOfServer);
+        }
+
+        @Override
+        public void run() {
+
+            try {
+
+                // Open input and output streams
+                BufferedReader is = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
+                BufferedWriter os = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
+
+                while (true) {
+                    // Read data to the server (sent from client).
+                    String line = is.readLine();
+                    log(line);
+                    // Write to socket of Server
+                    // (Send to client)
+                    os.write("donnée " + line +" recue");
+                    // End of line.
+                    os.newLine();
+                    // Flush data.
+                    os.flush();
+
+                    if (line.equals("envoie de données")) {
+                        log("Reception de données d'un client");
+                        os.write(">> les données ont été recues");
+                        os.newLine();
+                        os.flush();
+                    }
+                    // If users send QUIT (To end conversation).
+                    if (line.equals("fin")) {
+                        os.write(">> les données ont été completement traitées");
+                        os.newLine();
+                        os.flush();
+                        break;
+                    }
+                }
+
+            } catch (IOException e) {
+                System.out.println(e);
+                e.printStackTrace();
+            }
+        }
     }
 }
