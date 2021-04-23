@@ -1,11 +1,13 @@
 package courses.client.app;
 import java.io.*;
 import java.net.*;
+import java.util.Date;
+
 public class ClientExchanges {
 
     public static void main(String[] args) {
 
-        // Server Host
+
         final String serverHost = "localhost";
 
         Socket socketOfClient = null;
@@ -13,9 +15,11 @@ public class ClientExchanges {
         BufferedReader is = null;
 
         try {
+
+
             // Send a request to connect to the server is listening
-            // on machine 'localhost' port 9999.
-            socketOfClient = new Socket(serverHost, 1024);
+            // on machine 'localhost' port 7777.
+            socketOfClient = new Socket(serverHost, 7777);
 
             // Create output stream at the client (to send data to the server)
             os = new BufferedWriter(new OutputStreamWriter(socketOfClient.getOutputStream()));
@@ -35,17 +39,23 @@ public class ClientExchanges {
         try {
 
             // Write data to the output stream of the Client Socket.
-            os.write("HELO");
+            os.write("HELO! now is " + new Date());
 
             // End of line
             os.newLine();
 
             // Flush data.
             os.flush();
-            os.write("I am Tom Cat");
+            os.write("envoie de données");
             os.newLine();
             os.flush();
-            os.write("QUIT");
+            os.write("donnée1");
+            os.newLine();
+            os.flush();
+            os.write("donnée2");
+            os.newLine();
+            os.flush();
+            os.write("fin");
             os.newLine();
             os.flush();
 
@@ -56,7 +66,7 @@ public class ClientExchanges {
             String responseLine;
             while ((responseLine = is.readLine()) != null) {
                 System.out.println("Server: " + responseLine);
-                if (responseLine.indexOf("OK") != -1) {
+                if (responseLine.indexOf(">> les données ont été completement traitées") != -1) {
                     break;
                 }
             }
@@ -64,6 +74,7 @@ public class ClientExchanges {
             os.close();
             is.close();
             socketOfClient.close();
+            System.out.println("socket closed");
         } catch (UnknownHostException e) {
             System.err.println("Trying to connect to unknown host: " + e);
         } catch (IOException e) {
