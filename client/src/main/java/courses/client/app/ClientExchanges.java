@@ -34,6 +34,7 @@ public class ClientExchanges{
         Socket socketOfClient = null;
         BufferedWriter os = null;
         BufferedReader is = null;
+        List<String> dataReceived = new ArrayList<String>();
 
         try {
             // Send a request to connect to the server is listening
@@ -48,10 +49,8 @@ public class ClientExchanges{
 
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + serverHost);
-            return;
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " + serverHost);
-            return;
         }
 
         try {
@@ -79,9 +78,11 @@ public class ClientExchanges{
 
             // Read data sent from the server.
             // By reading the input stream of the Client Socket.
+
             String responseLine;
             while ((responseLine = is.readLine()) != null) {
                 System.out.println("Server: " + responseLine);
+                dataReceived.add(responseLine);
                 if (responseLine.indexOf("OK") != -1) {
                     break;
                 }
