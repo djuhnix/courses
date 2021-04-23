@@ -7,12 +7,15 @@ include 'client'
 //lib version
 gradle.ext.hsqldbVersion = '2.6.0'
 //default database config
-gradle.ext.dbName = "courses"
-gradle.ext.dbFile = "database/mooddb"
+gradle.ext.dbName = "mooddb"
+gradle.ext.dbFile = "src/main/resources/database/mooddb"
 gradle.ext.dbUser = "SA"
 gradle.ext.dbPassword = ""
 gradle.ext.dbPort = 9001
 gradle.ext.dbHost = "localhost"
 gradle.ext.dbUrl = "jdbc:hsqldb:hsql://${gradle.dbHost}:${gradle.dbPort}/${gradle.dbName}"
 gradle.ext.dbDrive = "org.hsqldb.jdbc.JDBCDriver"
+
+//sql scripts
+gradle.ext.sqlDir = 'src/main/resources/database/scripts/'
 

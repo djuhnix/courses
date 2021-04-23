@@ -1,14 +1,41 @@
 package entities;
 
-import java.util.Date;
+import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Data
 public class Activity {
+    @Id @GeneratedValue
+    private Integer id;
     private String name;
+
+    @Basic @Column(name = "START_DATE", nullable = false)
     private Date start;
+
+    @Basic @Column(name = "END_DATE", nullable = false)
     private Date end;
+
+    @Basic @Column(name = "SUBJECT", nullable = false)
     private String subject;
+
+    @ManyToOne
     private Promotion promo;
+
+    @ManyToOne
     private Teacher teacher;
+    @OneToMany(mappedBy = "activity")
+    private List<Graduation> graduations;
+
+    @Basic @Column(name = "ID_PROMOTION", nullable = false)
+    private int idPromotion;
+
+    @Basic
+    @Column(name = "ID_TEACHER", nullable = false)
+    private int idTeacher;
 
     public Activity(String name, Date start, Date end, String subject, Promotion promo, Teacher teacher) {
         this.name = name;
@@ -19,53 +46,6 @@ public class Activity {
         this.teacher = teacher;
     }
 
-    public String getName() {
-        return name;
+    public Activity() {
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public Promotion getPromo() {
-        return promo;
-    }
-
-    public void setPromo(Promotion promo) {
-        this.promo = promo;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-
 }

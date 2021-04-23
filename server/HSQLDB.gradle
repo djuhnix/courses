@@ -71,7 +71,17 @@ task createDatabaseTable() {
         //noinspection GroovyAssignabilityCheck
         Sql sql = getSQLInstance()
         // TODO create database statement
-        //sql.execute('CREATE;')
+        String sqlDir = project.properties['sqlDir'] ?: gradle.sqlDir
+        fileTree(dir: sqlDir, include: "**.sql", exclude: [/* files to exclude here */]).each {
+            String[] commands = it.text.split(";")
+            for(String command: commands)
+            {
+                // new line is a delimiter in hsqldb
+                sql.execute command.replace("\n", " ")
+            }
+        }
+        // remember to call shutdown otherwise hsqldb will not save your data
+        sql.execute "SHUTDOWN"
         sql.close()
     }
 }
@@ -86,6 +96,7 @@ Sql getSQLInstance() {
     project.buildscript.configurations.classpath.each { File file ->
         loader.addURL(file.toURI().toURL())
     }
+    println "------------ DB URL : " + dbUrl + " ------------"
     //noinspection GroovyAssignabilityCheck
     return Sql.newInstance(dbUrl, dbUser, dbPassword, dbDrive) as Sql
 }

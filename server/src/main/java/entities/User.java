@@ -1,87 +1,58 @@
 package entities;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
+import javax.persistence.Entity;
+
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name="TYPE", discriminatorType=DiscriminatorType.STRING,length=20)
+@DiscriminatorValue("user")
+@Data
 public class User {
-    private String nom;
-    private String prenom;
-    private String telephone;
+    @Id @GeneratedValue
+    @Column(name = "ID", nullable = false)
+    private Integer id;
+
+    @Basic @Column(name = "EMAIL", nullable = false, length = 50)
     private String email;
+
+
+    private String passwordHash;
+
+    @Basic @Column(name = "TELEPHONE", nullable = false, length = 25)
+    private String telephone;
+
+    @Basic @Column(name = "ADRESSE1", nullable = false, length = 25)
     private String adresse1;
+
+    @Basic @Column(name = "ADRESSE2", nullable = true, length = 25)
     private String adresse2;
+
+    @Basic @Column(name = "VILLE", nullable = false, length = 25)
     private String ville;
+
+    @Basic @Column(name = "CP", nullable = false, length = 25)
     private String cp;
 
-    public User(String nom, String prenom, String telephone, String email, String adresse1, String adresse2, String ville, String cp) {
-        this.nom = nom;
+    @Basic @Column(name = "NOM", nullable = false, length = 25)
+    private String nom;
+
+    @Basic @Column(name = "PRENOM", nullable = false, length = 25)
+    private String prenom;
+
+    public User() {
+    }
+
+    public User(String prenom, String nom, String telephone, String email, String adresse1, String adresse2, String ville, String cp) {
         this.prenom = prenom;
+        this.nom = nom;
         this.telephone = telephone;
         this.email = email;
         this.adresse1 = adresse1;
         this.adresse2 = adresse2;
         this.ville = ville;
-        this.cp = cp;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAdresse1() {
-        return adresse1;
-    }
-
-    public void setAdresse1(String adresse1) {
-        this.adresse1 = adresse1;
-    }
-
-    public String getAdresse2() {
-        return adresse2;
-    }
-
-    public void setAdresse2(String adresse2) {
-        this.adresse2 = adresse2;
-    }
-
-    public String getVille() {
-        return ville;
-    }
-
-    public void setVille(String ville) {
-        this.ville = ville;
-    }
-
-    public String getCp() {
-        return cp;
-    }
-
-    public void setCp(String cp) {
         this.cp = cp;
     }
 }
