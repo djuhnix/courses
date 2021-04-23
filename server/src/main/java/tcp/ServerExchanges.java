@@ -79,7 +79,7 @@ public class ServerExchanges {
             }
 
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+                ioException.printStackTrace();
         }
         System.out.println("Sever stopped!");
     }
