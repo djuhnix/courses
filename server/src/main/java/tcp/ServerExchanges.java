@@ -1,4 +1,6 @@
 package tcp;
+import entities.Aggregator;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -79,12 +81,12 @@ public class ServerExchanges {
                         dataReceived.add(testJackson.jsonToObject(line));
                     }
                 }
-                dataReceived.toArray(new Object[dataReceived.size()]);
+                dataReceived.toArray(new Aggregator[dataReceived.size()]);
 
                 //call functions to process data received
                 //TODO
 
-                Object[] ObjectsToSend = new Object[0];
+                Aggregator[] ObjectsToSend = new Aggregator[0];
                 String stringValue;
                 for (Object value : ObjectsToSend) {
 

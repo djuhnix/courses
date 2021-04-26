@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Promotion {
+public class Promotion extends Aggregator{
     @Id @GeneratedValue @Column(name = "ID", nullable = false)
     private Long id;
 

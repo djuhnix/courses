@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Exercise {
+public class Exercise extends Aggregator{
     private Activity activity;
     private String filePath;
     private int id;
