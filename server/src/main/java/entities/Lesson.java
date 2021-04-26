@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Lesson {
+public class Lesson extends Aggregator{
 
     @Id @Column(name = "ID", nullable = false)
     private int id;

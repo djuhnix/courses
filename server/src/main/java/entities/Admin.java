@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @DiscriminatorValue("admin")
 @Data
-public class Admin extends User {
+public class Admin extends User{
 
     @Id @Column(name = "ID", nullable = false)
     private int id;

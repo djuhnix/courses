@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 @DiscriminatorColumn(name="TYPE", discriminatorType=DiscriminatorType.STRING,length=20)
 @DiscriminatorValue("user")
 @Data
-public class User {
+public class User extends Aggregator{
     @Id @GeneratedValue
     @Column(name = "ID", nullable = false)
     private Integer id;
