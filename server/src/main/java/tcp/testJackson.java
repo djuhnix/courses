@@ -2,6 +2,7 @@ package tcp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import entities.Aggregator;
 
 import java.io.IOException;
 
@@ -36,7 +37,7 @@ public class testJackson {
         ObjectMapper mapper = new ObjectMapper();
         Object instanceResult = null;
         try {
-            instanceResult = mapper.readValue(json, Object.class);
+            instanceResult = mapper.readValue(json, Aggregator.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
