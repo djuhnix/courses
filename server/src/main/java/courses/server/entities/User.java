@@ -1,5 +1,6 @@
-package entities;
+package courses.server.entities;
 
+import courses.server.security.RolesEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,8 +19,10 @@ public class User extends Aggregator{
     @Basic @Column(name = "EMAIL", nullable = false, length = 50)
     private String email;
 
-
     private String passwordHash;
+
+    @Basic @Column(name = "ROLES", nullable = false)
+    private RolesEnum[] roles;
 
     @Basic @Column(name = "TELEPHONE", nullable = false, length = 25)
     private String telephone;

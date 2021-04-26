@@ -1,4 +1,4 @@
-package manager;
+package courses.server.manager;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
