@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Data
 @IdClass(GraduationPK.class)
-public class Graduation {
+public class Graduation extends Aggregator{
 
     @ManyToOne
     private Student student;

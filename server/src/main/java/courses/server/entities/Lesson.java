@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Lesson {
+public class Lesson extends Aggregator{
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
