@@ -1,8 +1,8 @@
-package dao;
+package courses.server.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import manager.DefaultEntityManager;
+import courses.server.manager.DefaultEntityManager;
 
 import java.util.List;
 

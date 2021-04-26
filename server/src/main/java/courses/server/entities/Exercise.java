@@ -1,4 +1,4 @@
-package entities;
+package courses.server.entities;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
