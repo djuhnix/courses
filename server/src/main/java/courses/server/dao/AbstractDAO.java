@@ -19,6 +19,7 @@ public abstract class AbstractDAO<T> {
 
     public abstract List<T> findAll();
     public abstract T findById(int id);
+    //public abstract T create(T entityObject);
 
     /**
      * Find one occurrence of an entity in the database
@@ -48,6 +49,10 @@ public abstract class AbstractDAO<T> {
 
     public void save(T entityObject) {
         em.persist(entityObject);
+    }
+
+    public T update(T entityObject) {
+        return em.merge(entityObject);
     }
 
     public void delete(T entityObject) {
