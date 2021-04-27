@@ -4,14 +4,15 @@ import courses.server.entities.User;
 import courses.server.security.RolesEnum;
 import jakarta.persistence.NoResultException;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.codec.Base64;
+import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +27,14 @@ public class UserRealmDAO extends JdbcRealm {
     public UserRealmDAO() {
         super();
         userDAO = new UserDAO();
+
+        // -- credential matcher
+        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
+        credentialsMatcher.setHashAlgorithmName(Sha512Hash.ALGORITHM_NAME);
+        setCredentialsMatcher(credentialsMatcher);
+
+        setSaltStyle(SaltStyle.COLUMN);
+
     }
 
     @Override
@@ -44,11 +53,12 @@ public class UserRealmDAO extends JdbcRealm {
                 || user == null) {
             throw new UnknownAccountException("username not found!");
         }
+        ByteSource salt = ByteSource.Util.bytes(Base64.decode(user.getSalt()));
 
         return new SimpleAuthenticationInfo(
                 uToken.getUsername(),
                 user.getPasswordHash(),
-                ByteSource.Util.bytes("salt"),
+                salt,
                 getName()
         );
     }
@@ -62,10 +72,9 @@ public class UserRealmDAO extends JdbcRealm {
     @Override
     protected Set<String> getRoleNamesForUser(Connection conn, String username) {
         HashSet<String> rolesNames = new HashSet<>();
-        User user = getUser(username);
-        for (RolesEnum value : user.getRoles()) {
-            rolesNames.add(value.name());
-        }
+        rolesNames.add(
+                getUser(username).getRole().getRoleName()
+        );
         return rolesNames;
     }
 

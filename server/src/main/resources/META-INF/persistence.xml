@@ -17,7 +17,7 @@
 
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver" />
 
-            <property name="javax.persistence.jdbc.url" value="jdbc:hsql:hsql://localhost:9001/courses" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:hsql:hsql://localhost:9001/mooddb" />
 
             <property name="eclipselink.logging.level" value="INFO" />
         </properties>

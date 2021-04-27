@@ -4,8 +4,6 @@ import courses.server.security.RolesEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import javax.persistence.Entity;
-
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="TYPE", discriminatorType=DiscriminatorType.STRING,length=20)
@@ -19,10 +17,15 @@ public class User extends Aggregator{
     @Basic @Column(name = "EMAIL", nullable = false, length = 50)
     private String email;
 
+    @Basic @Column(name = "PASSWORD_HASH", nullable = false)
     private String passwordHash;
 
-    @Basic @Column(name = "ROLES", nullable = false)
-    private RolesEnum[] roles;
+    @Column(name = "ROLE", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RolesEnum role;
+
+    @Basic @Column(name = "SALT", nullable = false)
+    private String salt;
 
     @Basic @Column(name = "TELEPHONE", nullable = false, length = 25)
     private String telephone;
