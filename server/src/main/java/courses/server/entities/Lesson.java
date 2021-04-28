@@ -7,7 +7,8 @@ import lombok.Data;
 @Data
 public class Lesson {
 
-    @Id @Column(name = "ID", nullable = false)
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private int id;
 
     @ManyToOne

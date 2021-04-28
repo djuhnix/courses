@@ -8,10 +8,11 @@ import java.util.List;
 @Entity
 @Data
 public class Promotion {
-    @Id @GeneratedValue @Column(name = "ID", nullable = false)
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private Long id;
 
-    @OneToMany(mappedBy = "promotion")
+    @OneToMany(mappedBy = "promotion", cascade=CascadeType.PERSIST)
     private List<Activity> activities;
 
     @OneToMany(mappedBy = "promotion")

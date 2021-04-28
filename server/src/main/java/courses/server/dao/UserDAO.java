@@ -19,10 +19,10 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public User findByEmail(String email) {
-        String sql = "SELECT * FROM " + User.class.getSimpleName() + " " +
-                "WHERE email = " + email;
+        String sql = "SELECT t FROM " + User.class.getSimpleName() + " t " +
+                "WHERE t.email = :email";
         TypedQuery<User> query = em.createQuery(sql, User.class);
-
+        query.setParameter("email", email);
         return query.getSingleResult();
     }
 

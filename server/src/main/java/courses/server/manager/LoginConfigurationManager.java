@@ -17,9 +17,11 @@ public class LoginConfigurationManager {
             @Override
             public AppConfigurationEntry[] getAppConfigurationEntry(String name) {
                 return new AppConfigurationEntry[]{
-                        new AppConfigurationEntry(loginModuleClass.getName(),
+                        new AppConfigurationEntry(
+                                loginModuleClass.getName(),
                                 AppConfigurationEntry.LoginModuleControlFlag.REQUIRED,
-                                new HashMap<>())
+                                new HashMap<>()
+                        )
                 };
             }
         };

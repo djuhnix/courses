@@ -28,9 +28,10 @@ public abstract class AbstractDAO<T> {
      * @return a single result from the database
      */
     public T findById(int id, Class<T> resultClass) {
-        String sql = "SELECT * FROM " + resultClass.getSimpleName() + " " +
-                "WHERE id = " + id;
+        String sql = "SELECT t FROM " + resultClass.getSimpleName() + " t" +
+                "WHERE t.id = :id";
         TypedQuery<T> query = em.createQuery(sql, resultClass);
+        query.setParameter("id", id);
 
         return query.getSingleResult();
     }
@@ -41,21 +42,31 @@ public abstract class AbstractDAO<T> {
      * @return a list of object.
      */
     public List<T> findAll(Class<T> resultClass) {
-        String sql = "SELECT * FROM " + resultClass.getSimpleName();
+        String sql = "SELECT t FROM " + resultClass.getSimpleName() + " t";
         TypedQuery<T> query = em.createQuery(sql, resultClass);
 
         return query.getResultList();
     }
 
     public void save(T entityObject) {
+        em.getTransaction().begin();
         em.persist(entityObject);
+        em.flush();
+        em.getTransaction().commit();
     }
 
     public T update(T entityObject) {
-        return em.merge(entityObject);
+        em.getTransaction().begin();
+        T ret = em.merge(entityObject);
+        em.flush();
+        em.getTransaction().commit();
+        return ret;
     }
 
     public void delete(T entityObject) {
+        em.getTransaction().begin();
         em.remove(entityObject);
+        em.flush();
+        em.getTransaction().commit();
     }
 }
