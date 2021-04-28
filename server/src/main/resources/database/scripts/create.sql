@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS user (
     salt varchar(255) NOT NULL,
     type varchar(20) NOT NULL,
     role varchar(50) NOT NULL,
+    validated boolean NOT NULL,
     PRIMARY KEY (id)
 );
 DROP TABLE IF EXISTS "admin";
