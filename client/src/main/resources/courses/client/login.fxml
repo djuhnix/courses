@@ -1,51 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<AnchorPane prefHeight="448.0" prefWidth="639.0" stylesheets="css/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="courses.client.controller.LoginController">
-    <children>
-        <VBox alignment="CENTER" layoutX="3.0" prefHeight="448.0" prefWidth="639.0" spacing="30.0">
-            <children>
-                <Label alignment="CENTER" layoutX="233.0" layoutY="137.0" prefHeight="19.0" prefWidth="149.0" text="Identifiez-vous">
-                    <font>
-                        <Font name="Helvetica" size="23.0" />
-                    </font></Label>
-                <TextField fx:id="user" layoutX="239.0" layoutY="189.0" prefHeight="9.0" prefWidth="426.0" promptText="Insérer le nom d'utilisateur">
-                    <VBox.margin>
-                        <Insets left="100.0" right="100.0" />
-                    </VBox.margin></TextField>
-                <PasswordField fx:id="password" layoutX="239.0" layoutY="189.0" prefHeight="12.0" prefWidth="426.0" promptText="Insérer le mot de passe">
-                    <VBox.margin>
-                        <Insets left="100.0" right="100.0" />
-                    </VBox.margin></PasswordField>
-                <HBox alignment="TOP_CENTER" prefHeight="40.0" prefWidth="626.0">
-                    <children>
-                        <Button fx:id="submit" alignment="CENTER" layoutX="287.0" layoutY="259.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="109.0" text="Valider" />
-                    </children>
-                </HBox>
-                <Label fx:id="error" alignment="CENTER" contentDisplay="CENTER" layoutX="163.0" layoutY="164.0" prefHeight="17.0" prefWidth="302.0" textFill="#eb0707" />
-            </children>
-            <padding>
-                <Insets top="50.0" />
-            </padding>
-        </VBox>
-        <VBox alignment="CENTER_LEFT" layoutX="490.0" prefHeight="448.0" prefWidth="149.0" spacing="360.0">
-            <children>
-                <Button fx:id="register" alignment="CENTER" mnemonicParsing="false" prefHeight="34.0" prefWidth="109.0" text="S'inscrire" />
-                <Button fx:id="quit" alignment="CENTER" mnemonicParsing="false" prefHeight="34.0" prefWidth="109.0" text="Quitter" />
-            </children>
-            <padding>
-                <Insets top="10.0" />
-            </padding>
-        </VBox>
-    </children>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="448.0" prefWidth="639.0" stylesheets="css/style.css" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="courses.client.controller.LoginController">
     <effect>
-        <Blend mode="MULTIPLY" />
+        <Blend mode="MULTIPLY"/>
     </effect>
+    <VBox alignment="CENTER" layoutX="3.0" prefHeight="448.0" prefWidth="639.0" spacing="30.0">
+        <padding>
+            <Insets top="50.0"/>
+        </padding>
+        <Label alignment="CENTER" layoutX="233.0" layoutY="137.0" prefHeight="19.0" prefWidth="149.0"
+               text="Identifiez-vous">
+            <font>
+                <Font name="Helvetica" size="23.0"/>
+            </font>
+        </Label>
+        <TextField fx:id="user" layoutX="239.0" layoutY="189.0" prefHeight="9.0" prefWidth="426.0"
+                   promptText="Insérer le nom d'utilisateur">
+            <VBox.margin>
+                <Insets left="100.0" right="100.0"/>
+            </VBox.margin>
+        </TextField>
+        <PasswordField fx:id="password" layoutX="239.0" layoutY="189.0" prefHeight="12.0" prefWidth="426.0"
+                       promptText="Insérer le mot de passe">
+            <VBox.margin>
+                <Insets left="100.0" right="100.0"/>
+            </VBox.margin>
+        </PasswordField>
+        <HBox alignment="TOP_CENTER" prefHeight="40.0" prefWidth="626.0">
+            <Button fx:id="submit" alignment="CENTER" layoutX="287.0" layoutY="259.0" mnemonicParsing="false"
+                    prefHeight="34.0" prefWidth="109.0" text="Valider"/>
+        </HBox>
+        <Label fx:id="error" alignment="CENTER" contentDisplay="CENTER" layoutX="163.0" layoutY="164.0"
+               prefHeight="17.0" prefWidth="302.0" textFill="#eb0707"/>
+    </VBox>
+    <VBox alignment="CENTER_LEFT" layoutX="490.0" prefHeight="448.0" prefWidth="149.0" spacing="360.0">
+        <padding>
+            <Insets top="10.0"/>
+        </padding>
+        <Button fx:id="register" alignment="CENTER" mnemonicParsing="false" prefHeight="34.0" prefWidth="109.0"
+                text="S'inscrire"/>
+        <Button fx:id="quit" alignment="CENTER" mnemonicParsing="false" prefHeight="34.0" prefWidth="109.0"
+                text="Quitter"/>
+    </VBox>
 </AnchorPane>
 
