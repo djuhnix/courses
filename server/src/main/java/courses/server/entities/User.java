@@ -14,36 +14,40 @@ import javax.persistence.Entity;
 public class User extends Aggregator{
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
-    private Integer id;
+    private Integer id = 0;
 
     @Basic @Column(name = "EMAIL", nullable = false, length = 50)
-    private String email;
+    private String email = "";
 
-    private String passwordHash;
+    private String passwordHash = "";
 
-    @Basic @Column(name = "ROLES", nullable = false)
-    private RolesEnum[] roles;
+    @Column(name = "ROLE", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RolesEnum role = RolesEnum.USER;
+
+    @Basic @Column(name = "SALT", nullable = false)
+    private String salt = "";
 
     @Basic @Column(name = "TELEPHONE", length = 25)
-    private String telephone;
+    private String telephone = "";
 
     @Basic @Column(name = "ADRESSE1", length = 25)
-    private String adresse1;
+    private String adresse1 = "";
 
     @Basic @Column(name = "ADRESSE2", length = 25)
-    private String adresse2;
+    private String adresse2 = "";
 
     @Basic @Column(name = "VILLE", length = 25)
-    private String ville;
+    private String ville = "";
 
     @Basic @Column(name = "CP", length = 25)
-    private String cp;
+    private String cp = "";
 
     @Basic @Column(name = "NOM", nullable = false, length = 25)
-    private String nom;
+    private String nom = "";
 
     @Basic @Column(name = "PRENOM", nullable = false, length = 25)
-    private String prenom;
+    private String prenom = "";
 
     public User() {
     }
