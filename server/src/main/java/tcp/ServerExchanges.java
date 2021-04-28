@@ -1,4 +1,8 @@
 package tcp;
+
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.Aggregator;
 
 import java.io.*;
@@ -57,10 +61,12 @@ public class ServerExchanges {
                         buf = temp;
                     }
 
+                    }
+                    log(Integer.toString(buf.length));
+                    fos.write(buf);
+                    fos.close();
                 }
-                log(Integer.toString(buf.length));
-                fos.write(buf);
-                fos.close();
+
                 //put all the Strings received from the client and transform them into Objects
                 //save all the objects into an array
                /* while (true) {
@@ -110,5 +116,29 @@ public class ServerExchanges {
             }
         }
         System.out.println("Sever stopped!");
+    }
+
+
+    public static String objectToJson(Object obj) {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(obj);
+            System.out.println("ResultingJSONstring = " + json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+    public static Object jsonToObject(String json){
+        ObjectMapper mapper = new ObjectMapper();
+        Object instanceResult = null;
+        try {
+            instanceResult = mapper.readValue(json, Aggregator.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return instanceResult;
     }
 }
