@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public enum RolesEnum {
+    USER ("user", new RolesScopesEnum[0]),
     ADMIN ("admin", new RolesScopesEnum[]{RolesScopesEnum.ALL}),
     TEACHER (
             "teacher",

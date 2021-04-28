@@ -5,7 +5,9 @@ import courses.server.security.RolesEnum;
 import jakarta.persistence.NoResultException;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
@@ -33,6 +35,7 @@ public class UserRealmDAO extends JdbcRealm {
         // -- credential matcher
         HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
         credentialsMatcher.setHashAlgorithmName(Sha512Hash.ALGORITHM_NAME);
+        credentialsMatcher.setStoredCredentialsHexEncoded(false);
         setCredentialsMatcher(credentialsMatcher);
 
         setSaltStyle(SaltStyle.COLUMN);
@@ -52,7 +55,8 @@ public class UserRealmDAO extends JdbcRealm {
         }
         if(uToken.getUsername() == null
                 || uToken.getUsername().isEmpty()
-                || user == null) {
+                || user == null
+        ) {
             throw new UnknownAccountException("username not found!");
         }
         ByteSource salt = ByteSource.Util.bytes(Base64.decode(user.getSalt()));
@@ -80,14 +84,22 @@ public class UserRealmDAO extends JdbcRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         //TODO security doGetAuthorizationInfo
-        return super.doGetAuthorizationInfo(principals);
+        //null usernames are invalid
+        if (principals == null) {
+            throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
+        }
+        String username = (String) getAvailablePrincipal(principals);
+        Set<String> roleNames = getRoleNamesForUser(null, username);
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roleNames);
+        info.setStringPermissions(getPermissions(null, username, roleNames));
+        return info;
     }
 
     @Override
     protected Set<String> getRoleNamesForUser(Connection conn, String username) {
         HashSet<String> rolesNames = new HashSet<>();
         rolesNames.add(
-                getUser(username).getRole().getRoleName()
+                getUser(username).getRole().name()
         );
         return rolesNames;
     }

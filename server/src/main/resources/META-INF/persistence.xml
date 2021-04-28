@@ -19,7 +19,7 @@
             <property name="jakarta.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver" />
             <!--jdbc:hsqldb:file:src/main/resources/database/mooddb-->
             <!--jdbc:hsqldb:hsql://localhost:9001/mooddb-->
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:hsqldb:file:src/main/resources/database/mooddb;user=SA;password=" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost:9001/mooddb" />
 
             <property name="eclipselink.logging.level" value="INFO" />
         </properties>
