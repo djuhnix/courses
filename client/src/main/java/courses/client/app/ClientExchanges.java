@@ -181,7 +181,7 @@ public class ClientExchanges {
 
     public static void addLessonOrExercise(char t, String n, int idAct, String filePath) throws IOException {
         sendObject(new Object(){
-            char type =t;
+            char type =t; //L for lesson, E for exo
             String name = n;
             int idActivity;
         });
@@ -233,16 +233,37 @@ public class ClientExchanges {
         return grades;
     }
 
-    public static void requestLesson(int id, String savePath){
-        //todo
-    }
+    public static void requestFile(char type, int id, String savePath) throws IOException {
+        BufferedWriter os = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+        FileOutputStream fos = new FileOutputStream(savePath+"\\lesson.pdf");
 
-    public static void requestExercise(int id, String savePath){
-        //todo
-    }
+        // Input stream at Client (Receive data from the server).
+        InputStream is = new BufferedInputStream(client.getInputStream());
 
-    public static void requestStudentWork(int id, String savePath){
-        //todo
+        String stringValue = "R"+type ;//RL for lesson, RE for exo and RW for work
+        os.write(stringValue);
+
+        // End of line
+        os.newLine();
+
+        // Flush data.
+        os.flush();
+        byte[] buf = new byte[1];
+        int append = is.read(buf);
+        while (append != -1) {
+            byte[] buf2 = new byte[1];
+            append = is.read(buf2);
+            if (append != -1) {
+                byte[] temp = new byte[buf.length + buf2.length];
+                System.arraycopy(buf, 0, temp, 0, buf.length);
+                System.arraycopy(buf2, 0, temp, buf.length, buf2.length);
+                buf = temp;
+            }
+
+        }
+        System.out.println(Integer.toString(buf.length));
+        fos.write(buf);
+        fos.close();
     }
 
     public static void sendObject(Object objectToSend) throws IOException {

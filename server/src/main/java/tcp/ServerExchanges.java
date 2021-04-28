@@ -80,7 +80,6 @@ public class ServerExchanges {
                     FileOutputStream fos = new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.pdf");
                     //File file = new File("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.txt");
                     //BufferedWriter os = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.txt")) );
-                    List<Object> dataReceived = new ArrayList<>();
                     byte[] buf = new byte[1];
                     int append = is.read(buf);
                     while (append != -1) {
