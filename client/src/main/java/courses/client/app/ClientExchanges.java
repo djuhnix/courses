@@ -1,16 +1,22 @@
 package courses.client.app;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ClientExchanges {
     final static String serverHost = "localhost";
+    static Socket  client = null;
     public static void main(String args[]){
         //testToJsonClass test= new testToJsonClass();
         try{
-            Socket client = ClientExchanges.createConnexion();
-            ClientExchanges.sendFile("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\recherche\\edf\\lettre.pdf", client);
+            client = ClientExchanges.createConnexion("bob","mdp");
+            ClientExchanges.sendFile("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\recherche\\edf\\lettre.pdf");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,7 +54,7 @@ public class ClientExchanges {
             String stringValue;
             for (Object value : ObjectsToSend) {
 
-                stringValue = testJackson.objectToJson(value);
+                stringValue = objectToJson(value);
                 // Write data to the output stream of the Client Socket.
                 os.write(stringValue);
 
@@ -86,24 +92,185 @@ public class ClientExchanges {
         return dataReceived.toArray(new String[dataReceived.size()]);
     }
 
-    public static Socket createConnexion() throws IOException {
+    public static Socket createConnexion(String login, String password) throws IOException {
         Socket socketOfClient = null;
         socketOfClient = new Socket(serverHost, 7777);
+        Object auth = new Object(){
+            String log = login;
+            String mdp = password;
+        };
+
+        // Create output stream at the client (to send data to the server)
+        BufferedWriter os = new BufferedWriter(new OutputStreamWriter(socketOfClient.getOutputStream()));
+
+        // Input stream at Client (Receive data from the server).
+        BufferedReader is = new BufferedReader(new InputStreamReader(socketOfClient.getInputStream()));
+
+        String stringValue = objectToJson(auth);
+        os.write(stringValue);
+
+        // End of line
+        os.newLine();
+
+        // Flush data.
+        os.flush();
+
+        os.close();
+        is.close();
+
+        String responseLine;
+        while ((responseLine = is.readLine()) != null) {
+            if(responseLine =="accepted"){
+                break;
+            }else if(responseLine == "refused"){
+                client.close();
+                break;
+            }else{
+                client.close();
+                System.out.println("erreur lors de la connexion");
+            }
+        }
         return socketOfClient;
 
+
+    }
+    public static void registrationStrudent( String ine,String firstName, String lastName, String email, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
+        sendObject( new Object(){
+            String INE = ine;
+            String fname = firstName;
+            String lName = lastName;
+            String mail = email;
+            String phoneNumber = phone;
+            String addressLine1 = address1;
+            String addressLine2 = address2;
+            String city = c;
+            String zc = zipeCode;
+        });
+
+    }
+    public static void registrationTeacher( String numen,String firstName, String lastName, String email, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
+        sendObject(new Object(){
+            String NUMEN = numen;
+            String fname = firstName;
+            String lName = lastName;
+            String mail = email;
+            String phoneNumber = phone;
+            String addressLine1 = address1;
+            String addressLine2 = address2;
+            String city = c;
+            String zc = zipeCode;
+        });
+
     }
 
-
-    public void sendAuthRequest(){
-        //Todo
+    public static void disconnection() throws IOException {
+        client.close();
     }
 
+    public static void addActivity(String n, Date start, Date end, String subj, int idProm) throws IOException {
+        sendObject(new Object(){
+            String name = n;
+            Date startDate = start;
+            Date endDate =end;
+            String subject = subj;
+            int idPromotion = idProm;
+        });
 
-    public static void sendFile(String path, Socket socketOfClient) {
+
+    }
+
+    public static void addLessonOrExercise(char t, String n, int idAct, String filePath) throws IOException {
+        sendObject(new Object(){
+            char type =t;
+            String name = n;
+            int idActivity;
+        });
+        sendFile(filePath);
+    }
+
+    public static void AddStudentWork(int idEx,String filePath) throws IOException {
+        sendObject(new Object(){
+            char type ='W';
+            int idExercice = idEx;
+        });
+        sendFile(filePath);
+    }
+
+    public static  void addGrade(int idStdt, int idAct, int grd) throws IOException {
+        sendObject(new Object(){
+            int idStudent = idStdt;
+            int idActivity = idAct;
+            int grade = grd;
+        });
+    }
+
+    public static ArrayList<Object> requestGrades() throws IOException {
+        BufferedWriter os = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+
+        // Input stream at Client (Receive data from the server).
+        BufferedReader is = new BufferedReader(new InputStreamReader(client.getInputStream()));
+
+        String stringValue ="G";
+        os.write(stringValue);
+
+        // End of line
+        os.newLine();
+
+        // Flush data.
+        os.flush();
+        String responseLine;
+        ArrayList<Object> grades =new ArrayList<>();
+        while ((responseLine = is.readLine()) != null) {
+            if (responseLine == "end") {
+                break;
+            } else {
+                grades.add(jsonToObject(responseLine));
+                System.out.println("erreur lors de la connexion");
+            }
+        }
+        os.close();
+        is.close();
+        return grades;
+    }
+
+    public static void requestLesson(int id, String savePath){
+        //todo
+    }
+
+    public static void requestExercise(int id, String savePath){
+        //todo
+    }
+
+    public static void requestStudentWork(int id, String savePath){
+        //todo
+    }
+
+    public static void sendObject(Object objectToSend) throws IOException {
+        // Create output stream at the client (to send data to the server)
+        BufferedWriter os = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+
+        // Input stream at Client (Receive data from the server).
+        BufferedReader is = new BufferedReader(new InputStreamReader(client.getInputStream()));
+
+        String stringValue = objectToJson(objectToSend);
+        os.write(stringValue);
+
+        // End of line
+        os.newLine();
+
+        // Flush data.
+        os.flush();
+
+        os.close();
+        is.close();
+
+
+    }
+    public static void sendFile(String path) {
         try
         {
 
-            BufferedOutputStream outFichier = new BufferedOutputStream(socketOfClient.getOutputStream());
+            BufferedOutputStream outFichier = new BufferedOutputStream(client.getOutputStream());
 
             try {
                 File file = new File(path);
@@ -123,9 +290,31 @@ public class ClientExchanges {
             }
             outFichier.close();
             outFichier.close();
-            socketOfClient.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String objectToJson(Object obj) {
+        ObjectWriter mapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(obj);
+            System.out.println("ResultingJSONstring = " + json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+    public static Object jsonToObject(String json){
+        ObjectMapper mapper = new ObjectMapper();
+        Object instanceResult = null;
+        try {
+            instanceResult = mapper.readValue(json, Object.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return instanceResult;
     }
 }

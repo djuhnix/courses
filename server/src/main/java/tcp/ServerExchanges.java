@@ -1,6 +1,8 @@
 package tcp;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.Aggregator;
 
 import java.io.*;
@@ -68,26 +70,35 @@ public class ServerExchanges {
                 // Open input and output streams
 
                 InputStream is = new BufferedInputStream(socketOfServer.getInputStream());
-                FileOutputStream fos = new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.pdf");
-                //File file = new File("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.txt");
-                //BufferedWriter os = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.txt")) );
-                List<Object> dataReceived = new ArrayList<>();
-                byte[] buf = new byte[1];
-                int append = is.read(buf);
-                while(append !=-1) {
-                    byte[] buf2 = new byte[1];
-                    append = is.read(buf2);
-                    if(append != -1){
-                        byte[] temp = new byte[buf.length + buf2.length];
-                        System.arraycopy(buf,0,temp,0,buf.length);
-                        System.arraycopy(buf2,0,temp,buf.length,buf2.length);
-                        buf = temp;
-                    }
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = br.readLine();
+                log(line);
+                //log request
+                if (line.startsWith("log")){
+                    jsonToObject(line);
+                }else if(line.startsWith("blb")) {
+                    FileOutputStream fos = new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.pdf");
+                    //File file = new File("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.txt");
+                    //BufferedWriter os = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.txt")) );
+                    List<Object> dataReceived = new ArrayList<>();
+                    byte[] buf = new byte[1];
+                    int append = is.read(buf);
+                    while (append != -1) {
+                        byte[] buf2 = new byte[1];
+                        append = is.read(buf2);
+                        if (append != -1) {
+                            byte[] temp = new byte[buf.length + buf2.length];
+                            System.arraycopy(buf, 0, temp, 0, buf.length);
+                            System.arraycopy(buf2, 0, temp, buf.length, buf2.length);
+                            buf = temp;
+                        }
 
+                    }
+                    log(Integer.toString(buf.length));
+                    fos.write(buf);
+                    fos.close();
                 }
-                log(Integer.toString(buf.length));
-                fos.write(buf);
-                fos.close();
+
                 //put all the Strings received from the client and transform them into Objects
                 //save all the objects into an array
                /* while (true) {
@@ -136,5 +147,29 @@ public class ServerExchanges {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public static String objectToJson(Object obj) {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(obj);
+            System.out.println("ResultingJSONstring = " + json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+    public static Object jsonToObject(String json){
+        ObjectMapper mapper = new ObjectMapper();
+        Object instanceResult = null;
+        try {
+            instanceResult = mapper.readValue(json, Aggregator.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return instanceResult;
     }
 }
