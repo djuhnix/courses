@@ -11,8 +11,11 @@ import org.apache.shiro.subject.Subject;
 public class Main {
     public static void main(String[] args) {
         //TODO server main
-/*
-        UserDAO dao = new UserDAO();
+        createAdminUser(new UserDAO());
+        logInAndOutTest(new UserController());
+    }
+
+    public static void createAdminUser(UserDAO dao) {
         User user = new User();
         user.setNom("nom");
         user.setPrenom("prenom");
@@ -21,15 +24,17 @@ public class Main {
         Password.saveHashedPassword(user, "password");
         dao.save(user);
         System.out.println("user saved");
+    }
 
- */
-        UserController controller = new UserController();
+    public static void logInAndOutTest(UserController controller) {
         Subject currentUser = controller.logUser("email", "password");
         if (currentUser.isAuthenticated()) {
             System.out.println("user logged in");
             if (currentUser.hasRole(RolesEnum.ADMIN.name())) {
                 System.out.println("I'm an admin");
             }
+            User user = (User) currentUser.getSession().getAttribute("user");
+            System.out.println("User lastname : " + user.getNom());
         } else {
             System.out.println("log in failed");
             System.exit(0);
