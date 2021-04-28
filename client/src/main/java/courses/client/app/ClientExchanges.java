@@ -7,12 +7,20 @@ import java.util.List;
 public class ClientExchanges {
     final static String serverHost = "localhost";
     public static void main(String args[]){
-        testToJsonClass test= new testToJsonClass();
-        Object[] array ={test};
-        String[] res = sendSocket(array);
+        //testToJsonClass test= new testToJsonClass();
+        try{
+            Socket client = ClientExchanges.createConnexion();
+            ClientExchanges.sendFile("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\recherche\\edf\\lettre.pdf", client);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        //Object[] array ={test};
+        //String[] res = sendSocket(array);
     }
 
-    public static String[] sendSocket(Object[] ObjectsToSend){
+    public static String[] sendObjects(Object[] ObjectsToSend) {
         Socket socketOfClient = null;
         BufferedWriter os = null;
         BufferedReader is = null;
@@ -36,8 +44,9 @@ public class ClientExchanges {
         }
 
         try {
+
             String stringValue;
-            for( Object value : ObjectsToSend ) {
+            for (Object value : ObjectsToSend) {
 
                 stringValue = testJackson.objectToJson(value);
                 // Write data to the output stream of the Client Socket.
@@ -75,5 +84,48 @@ public class ClientExchanges {
             System.err.println("IOException:  " + e);
         }
         return dataReceived.toArray(new String[dataReceived.size()]);
+    }
+
+    public static Socket createConnexion() throws IOException {
+        Socket socketOfClient = null;
+        socketOfClient = new Socket(serverHost, 7777);
+        return socketOfClient;
+
+    }
+
+
+    public void sendAuthRequest(){
+        //Todo
+    }
+
+
+    public static void sendFile(String path, Socket socketOfClient) {
+        try
+        {
+
+            BufferedOutputStream outFichier = new BufferedOutputStream(socketOfClient.getOutputStream());
+
+            try {
+                File file = new File(path);
+                int length =(int) file.length();
+                BufferedInputStream temp = new BufferedInputStream(new FileInputStream(file),length);
+                int len = 0;
+                byte[] tampon = new byte[length];
+                len = temp.read(tampon, 0, length);
+                outFichier.write(tampon, 0, len);
+                outFichier.flush();
+                System.out.println(len + " bytes ont ete envoyes correctement" );
+                //     }
+            }
+            catch
+            (IOException e) {
+                System.out.println("impossible d'ouvrir le fichier" );
+            }
+            outFichier.close();
+            outFichier.close();
+            socketOfClient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
