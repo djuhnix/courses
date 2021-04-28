@@ -12,7 +12,9 @@ import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -61,6 +63,18 @@ public class UserRealmDAO extends JdbcRealm {
                 salt,
                 getName()
         );
+    }
+
+    @Override
+    protected String getSaltForUser(String username) {
+        return userDAO.findUserSaltByEmail(username);
+    }
+
+    private String[] getPasswordForUser(Connection conn, String username) {
+        return new String[]{
+                userDAO.findUserPasswordByEmail(username),
+                this.getSaltForUser(username)
+        };
     }
 
     @Override
