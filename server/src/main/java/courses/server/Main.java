@@ -11,7 +11,7 @@ import org.apache.shiro.subject.Subject;
 public class Main {
     public static void main(String[] args) {
         //TODO server main
-
+/*
         UserDAO dao = new UserDAO();
         User user = new User();
         user.setNom("nom");
@@ -21,10 +21,21 @@ public class Main {
         Password.saveHashedPassword(user, "password");
         dao.save(user);
         System.out.println("user saved");
+
+ */
         UserController controller = new UserController();
-        Subject currentUser = controller.logUser("user", "password");
-        System.out.println("user logged in");
+        Subject currentUser = controller.logUser("email", "password");
+        if (currentUser.isAuthenticated()) {
+            System.out.println("user logged in");
+            if (currentUser.hasRole(RolesEnum.ADMIN.name())) {
+                System.out.println("I'm an admin");
+            }
+        } else {
+            System.out.println("log in failed");
+            System.exit(0);
+        }
         currentUser.logout();
+        //if (currentUser.is)
         System.out.println("user logged out");
     }
 }

@@ -16,13 +16,17 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
     implementation group: 'org.eclipse.persistence', name: 'jakarta.persistence', version: '2.2.3'
     implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.0.0'
     implementation group: 'org.eclipse.persistence', name: 'eclipselink', version: '3.0.1'
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     implementation group: 'org.hsqldb', name: 'hsqldb', version: gradle.hsqldbVersion
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
     implementation group: 'org.apache.shiro', name: 'shiro-all', version: '1.7.1'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
