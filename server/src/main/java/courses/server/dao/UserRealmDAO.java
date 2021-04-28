@@ -83,16 +83,16 @@ public class UserRealmDAO extends JdbcRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        //TODO security doGetAuthorizationInfo
         //null usernames are invalid
         if (principals == null) {
             throw new AuthorizationException("PrincipalCollection method argument cannot be null.");
+        } else {
+            String username = (String) getAvailablePrincipal(principals);
+            Set<String> roleNames = getRoleNamesForUser(null, username);
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roleNames);
+            info.setStringPermissions(getPermissions(null, username, roleNames));
+            return info;
         }
-        String username = (String) getAvailablePrincipal(principals);
-        Set<String> roleNames = getRoleNamesForUser(null, username);
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roleNames);
-        info.setStringPermissions(getPermissions(null, username, roleNames));
-        return info;
     }
 
     @Override
