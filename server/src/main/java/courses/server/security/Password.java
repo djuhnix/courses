@@ -1,5 +1,6 @@
-package courses.utils.security;
+package courses.server.security;
 
+import courses.server.entities.User;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -18,7 +19,7 @@ public class Password {
      *
      * @param clearTextPassword The clear text password to be hashed and salted
      */
-    public void saveHashedPassword (String clearTextPassword) {
+    public static void saveHashedPassword (User user, String clearTextPassword) {
         String hashedPassword;
         byte[] saltBytes;
         String salt;
@@ -27,8 +28,10 @@ public class Password {
         hashedPassword = hashAndSaltPassword(clearTextPassword, saltBytes);
         salt = Base64.getEncoder().encodeToString(saltBytes);
         // persist salt and hash or return them to delegate this task to other component
-        System.out.println(hashedPassword.length() + "\tpwd \t" + hashedPassword);
-        System.out.println(salt.length() + "\tsalt\t" + salt);
+        // System.out.println(hashedPassword.length() + "\tpwd \t" + hashedPassword);
+        user.setPasswordHash(hashedPassword);
+        user.setSalt(salt);
+        //return user;
     }
 
     /**
@@ -41,7 +44,7 @@ public class Password {
      * @param salt The byte array salt value to use in hashing
      * @return The hashed and salted password
      */
-    private String hashAndSaltPassword(String clearTextPassword, byte[] salt) {
+    private static String hashAndSaltPassword(String clearTextPassword, byte[] salt) {
         byte[] hashedBytes;
         String hashedPassword = "";
 
@@ -64,7 +67,7 @@ public class Password {
      *
      * @return A byte array salt value
      */
-    private byte[] getSalt() {
+    private static byte[] getSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);

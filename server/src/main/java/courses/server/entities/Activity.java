@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Data
 public class Activity extends Aggregator {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
     private String name;
 
@@ -27,8 +27,12 @@ public class Activity extends Aggregator {
 
     @ManyToOne
     private Teacher teacher;
-    @OneToMany(mappedBy = "activity")
+
+    @OneToMany(mappedBy = "activity", cascade=CascadeType.PERSIST)
     private List<Graduation> graduations;
+
+    @OneToMany(mappedBy = "activity", cascade=CascadeType.PERSIST)
+    private List<Exercise> exercises;
 
     @Basic @Column(name = "ID_PROMOTION", nullable = false)
     private int idPromotion;
