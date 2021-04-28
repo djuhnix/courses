@@ -1,6 +1,7 @@
 package courses.server.dao;
 
 import courses.server.entities.User;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
@@ -23,5 +24,13 @@ public class UserDAO extends AbstractDAO<User> {
         TypedQuery<User> query = em.createQuery(sql, User.class);
 
         return query.getSingleResult();
+    }
+
+    public String findUserSaltByEmail(String email) {
+        return this.findByEmail(email).getSalt();
+    }
+
+    public String findUserPasswordByEmail(String email) {
+        return this.findByEmail(email).getPasswordHash();
     }
 }
