@@ -4,7 +4,7 @@ plugins {
     id 'org.beryx.jlink' version '2.12.0'
 }
 application {
-    mainClass = 'courses.client.Main' as Property<String>
+    mainClass.set 'courses.client.App'
 }
 
 javafx {
@@ -19,7 +19,7 @@ repositories {
 }
 
 jlink {
-    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    addOptions('--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages')
     launcher {
         name = 'Mood'
     }
