@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @DiscriminatorColumn(name="TYPE", discriminatorType=DiscriminatorType.STRING, length=20)
 @DiscriminatorValue("user")
 @Data
-public class User extends Aggregator{
+public class User extends Aggregator {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;

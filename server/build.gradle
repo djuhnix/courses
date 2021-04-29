@@ -26,10 +26,10 @@ dependencies {
     implementation group: 'org.apache.shiro', name: 'shiro-all', version: '1.7.1'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+    implementation project(':utils')
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
 }
 
 test {
