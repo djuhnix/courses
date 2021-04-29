@@ -3,7 +3,7 @@ package tcp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entities.Aggregator;
+import entities.*;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -71,15 +71,33 @@ public class ServerExchanges {
 
                 InputStream is = new BufferedInputStream(socketOfServer.getInputStream());
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                BufferedWriter os = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
                 String line = br.readLine();
-                log(line);
                 //log request
-                if (line.startsWith("log")){
-                    jsonToObject(line);
-                }else if(line.startsWith("blb")) {
+                log(line);
+                if (line.startsWith("{\"login\"")){
+                    Object auth = jsonToObject(line);
+                    // créer la session
+
+
+                    os.write("accepted");
+                    os.newLine();
+                    os.flush();
+
+
+                }else if(line.startsWith("{\"INE\"")) {
+                    Student student = (Student) jsonToObject(line);
+                    //ajouter l'eleve à la bd
+                }else if(line.startsWith("{\"NUMEN\"")) {
+                    Teacher teacher = (Teacher) jsonToObject(line);
+                    //ajouter l'enseignant à la bd
+                }else if(line.startsWith("{\"name\"")) {
+                    Activity activity = (Activity) jsonToObject(line);
+                    //ajouter l'activité à la bd
+                }else if(line.equals("L")) {
+                    line= br.readLine();
+                    Lesson lesson = (Lesson) jsonToObject(line);
                     FileOutputStream fos = new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.pdf");
-                    //File file = new File("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.txt");
-                    //BufferedWriter os = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.txt")) );
                     byte[] buf = new byte[1];
                     int append = is.read(buf);
                     while (append != -1) {
@@ -96,9 +114,38 @@ public class ServerExchanges {
                     log(Integer.toString(buf.length));
                     fos.write(buf);
                     fos.close();
+                }else if(line.equals("E")) {
+                    line= br.readLine();
+                    Exercise exercise = (Exercise) jsonToObject(line);
+
+                    FileOutputStream fos = new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.pdf");
+                    byte[] buf = new byte[1];
+                    int append = is.read(buf);
+                    while (append != -1) {
+                        byte[] buf2 = new byte[1];
+                        append = is.read(buf2);
+                        if (append != -1) {
+                            byte[] temp = new byte[buf.length + buf2.length];
+                            System.arraycopy(buf, 0, temp, 0, buf.length);
+                            System.arraycopy(buf2, 0, temp, buf.length, buf2.length);
+                            buf = temp;
+                        }
+
+                    }
+                    log(Integer.toString(buf.length));
+                    fos.write(buf);
+                    fos.close();
+                }else if(line.startsWith("{\"idStudent\"")) {
+                    Graduation graduation = (Graduation) jsonToObject(line);
                 }
 
-                //put all the Strings received from the client and transform them into Objects
+                } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
+            //put all the Strings received from the client and transform them into Objects
                 //save all the objects into an array
                /* while (true) {
                     byte[] line =is.readLine();
@@ -140,11 +187,6 @@ public class ServerExchanges {
             } catch (IOException e) {
                 e.printStackTrace();
             }*/
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -165,7 +207,7 @@ public class ServerExchanges {
         ObjectMapper mapper = new ObjectMapper();
         Object instanceResult = null;
         try {
-            instanceResult = mapper.readValue(json, Aggregator.class);
+            instanceResult = mapper.readValue(json, Object.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
