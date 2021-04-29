@@ -6,13 +6,25 @@ import courses.server.dao.UserDAO;
 import courses.server.entities.User;
 import courses.server.security.Password;
 import courses.server.security.RolesEnum;
+import courses.server.tcp.ServerExchanges;
 import org.apache.shiro.subject.Subject;
 
-public class Main {
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Server {
     public static void main(String[] args) {
         //TODO server main
-        createAdminUser(new UserDAO());
-        logInAndOutTest(new UserController());
+        try {
+            ServerExchanges.start();
+        } catch (IOException e) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, "An error occurred, server stop", e);
+            e.printStackTrace();
+        }
+
+        //createAdminUser(new UserDAO());
+        //logInAndOutTest(new UserController());
     }
 
     public static void createAdminUser(UserDAO dao) {

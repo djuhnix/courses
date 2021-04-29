@@ -4,11 +4,12 @@ import com.hazelcast.client.impl.ClientEndpoint;
 import courses.server.dao.UserDAO;
 import courses.server.entities.User;
 import courses.server.manager.DefaultSecurityManager;
+import courses.utils.DefaultData;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 
-public class AbstractController {
+public abstract class AbstractController<T> {
     private final UserDAO userDAO;
 
     AbstractController() {
@@ -28,6 +29,12 @@ public class AbstractController {
             return null;
         }
     }
+
+    public abstract T read(Class<?> type, int id);
+    public abstract T read(int id);
+    public abstract boolean post(DefaultData<?> object);
+    public abstract T update(DefaultData<?> object);
+    public abstract void delete(int id);
 
     /**
      * Log the user in the system and a session variable to fetch user info
@@ -59,5 +66,4 @@ public class AbstractController {
         currentUser.getSession().setAttribute("user", userDAO.findByEmail(email));
         return currentUser;
     }
-
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Exercise extends Aggregator{
+public class Exercise extends Aggregator {
 
     @Basic @Column(name = "FILEPATH", nullable = false, length = 500)
     private String filePath;
