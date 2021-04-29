@@ -257,6 +257,10 @@ public class ClientExchanges{
 
         // Flush data.
         os.flush();
+
+        os.write(id);
+        os.newLine();
+        os.flush();
         byte[] buf = new byte[1];
         int append = is.read(buf);
         while (append != -1) {
