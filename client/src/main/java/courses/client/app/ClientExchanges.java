@@ -2,6 +2,7 @@ package courses.client.app;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.ser.Serializers;
 
 import java.io.*;
 import java.net.*;
@@ -9,14 +10,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ClientExchanges {
+public class ClientExchanges{
     final static String serverHost = "localhost";
     static Socket  client = null;
     public static void main(String args[]){
         //testToJsonClass test= new testToJsonClass();
         try{
-            client = ClientExchanges.createConnexion("bob","mdp");
-            ClientExchanges.sendFile("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\recherche\\edf\\lettre.pdf");
+            client = createConnexion("bob","mdp");
+            registrationStrudent("BBI","v","t","rrr","","","","","");
+            //ClientExchanges.sendFile("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\recherche\\edf\\lettre.pdf");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -26,7 +28,7 @@ public class ClientExchanges {
         //String[] res = sendSocket(array);
     }
 
-    public static String[] sendObjects(Object[] ObjectsToSend) {
+    /*public static String[] sendObjects(Object[] ObjectsToSend) {
         Socket socketOfClient = null;
         BufferedWriter os = null;
         BufferedReader is = null;
@@ -90,14 +92,17 @@ public class ClientExchanges {
             System.err.println("IOException:  " + e);
         }
         return dataReceived.toArray(new String[dataReceived.size()]);
-    }
+    }*/
 
-    public static Socket createConnexion(String login, String password) throws IOException {
+    public static Socket createConnexion(String log, String password) throws IOException {
         Socket socketOfClient = null;
         socketOfClient = new Socket(serverHost, 7777);
-        Object auth = new Object(){
-            String log = login;
-            String mdp = password;
+        //Converting the Object to JSONString
+
+
+        Object auth =new Object(){
+            public String login = log;
+            public String mdp = password;
         };
 
         // Create output stream at the client (to send data to the server)
@@ -115,50 +120,57 @@ public class ClientExchanges {
         // Flush data.
         os.flush();
 
-        os.close();
-        is.close();
+
 
         String responseLine;
         while ((responseLine = is.readLine()) != null) {
-            if(responseLine =="accepted"){
+            if(responseLine.equals("accepted")){
+                System.out.println("accepted");
                 break;
-            }else if(responseLine == "refused"){
+            }else if(responseLine.equals("refused") ){
+                System.out.println("refused");
+                os.close();
+                is.close();
                 client.close();
                 break;
             }else{
+                os.close();
+                is.close();
                 client.close();
                 System.out.println("erreur lors de la connexion");
             }
+
         }
+
         return socketOfClient;
 
 
     }
     public static void registrationStrudent( String ine,String firstName, String lastName, String email, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
         sendObject( new Object(){
-            String INE = ine;
-            String fname = firstName;
-            String lName = lastName;
-            String mail = email;
-            String phoneNumber = phone;
-            String addressLine1 = address1;
-            String addressLine2 = address2;
-            String city = c;
-            String zc = zipeCode;
+            public String INE = ine;
+            public String fname = firstName;
+            public String lName = lastName;
+            public String mail = email;
+            public String phoneNumber = phone;
+            public String addressLine1 = address1;
+            public String addressLine2 = address2;
+            public String city = c;
+            public String zc = zipeCode;
         });
 
     }
     public static void registrationTeacher( String numen,String firstName, String lastName, String email, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
         sendObject(new Object(){
-            String NUMEN = numen;
-            String fname = firstName;
-            String lName = lastName;
-            String mail = email;
-            String phoneNumber = phone;
-            String addressLine1 = address1;
-            String addressLine2 = address2;
-            String city = c;
-            String zc = zipeCode;
+            public String NUMEN = numen;
+            public String fname = firstName;
+            public String lName = lastName;
+            public String mail = email;
+            public String phoneNumber = phone;
+            public String addressLine1 = address1;
+            public String addressLine2 = address2;
+            public String city = c;
+            public String zc = zipeCode;
         });
 
     }
@@ -169,38 +181,37 @@ public class ClientExchanges {
 
     public static void addActivity(String n, Date start, Date end, String subj, int idProm) throws IOException {
         sendObject(new Object(){
-            String name = n;
-            Date startDate = start;
-            Date endDate =end;
-            String subject = subj;
-            int idPromotion = idProm;
+            public String name = n;
+            public Date startDate = start;
+            public Date endDate =end;
+            public String subject = subj;
+            public int idPromotion = idProm;
         });
 
 
     }
 
-    public static void addLessonOrExercise(char t, String n, int idAct, String filePath) throws IOException {
+    public static void addLessonOrExercise(String t, String n, int idAct, String filePath) throws IOException {
+        sendString(t);// L for a lesson and E for an exercise
         sendObject(new Object(){
-            char type =t; //L for lesson, E for exo
-            String name = n;
-            int idActivity;
+            public String name = n;
+            public int idActivity;
         });
         sendFile(filePath);
     }
 
     public static void AddStudentWork(int idEx,String filePath) throws IOException {
         sendObject(new Object(){
-            char type ='W';
-            int idExercice = idEx;
+            public int idExercice = idEx;
         });
         sendFile(filePath);
     }
 
     public static  void addGrade(int idStdt, int idAct, int grd) throws IOException {
         sendObject(new Object(){
-            int idStudent = idStdt;
-            int idActivity = idAct;
-            int grade = grd;
+            public int idStudent = idStdt;
+            public int idActivity = idAct;
+            public int grade = grd;
         });
     }
 
@@ -228,8 +239,6 @@ public class ClientExchanges {
                 System.out.println("erreur lors de la connexion");
             }
         }
-        os.close();
-        is.close();
         return grades;
     }
 
@@ -261,17 +270,13 @@ public class ClientExchanges {
             }
 
         }
-        System.out.println(Integer.toString(buf.length));
+        System.out.println(buf.length);
         fos.write(buf);
-        fos.close();
     }
 
     public static void sendObject(Object objectToSend) throws IOException {
         // Create output stream at the client (to send data to the server)
         BufferedWriter os = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-
-        // Input stream at Client (Receive data from the server).
-        BufferedReader is = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
         String stringValue = objectToJson(objectToSend);
         os.write(stringValue);
@@ -281,9 +286,6 @@ public class ClientExchanges {
 
         // Flush data.
         os.flush();
-
-        os.close();
-        is.close();
 
 
     }
@@ -309,15 +311,27 @@ public class ClientExchanges {
             (IOException e) {
                 System.out.println("impossible d'ouvrir le fichier" );
             }
-            outFichier.close();
-            outFichier.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static void sendString(String stringToSend) throws IOException {
+        // Create output stream at the client (to send data to the server)
+        BufferedWriter os = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+
+        os.write(stringToSend);
+
+        // End of line
+        os.newLine();
+
+        // Flush data.
+        os.flush();
+
+
+    }
     public static String objectToJson(Object obj) {
-        ObjectWriter mapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        ObjectWriter mapper = new ObjectMapper().writer();
         String json = null;
         try {
             json = mapper.writeValueAsString(obj);
@@ -338,4 +352,5 @@ public class ClientExchanges {
         }
         return instanceResult;
     }
+
 }
