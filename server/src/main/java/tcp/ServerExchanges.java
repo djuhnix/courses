@@ -95,8 +95,11 @@ public class ServerExchanges {
                     Activity activity = (Activity) jsonToObject(line);
                     //ajouter l'activité à la bd
                 }else if(line.equals("L")) {
+
                     line= br.readLine();
                     Lesson lesson = (Lesson) jsonToObject(line);
+                    //ajout de l'élement lesson à la bd
+                    //récupération du fichier et enregistrement
                     FileOutputStream fos = new FileOutputStream("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\projet S2\\retour.pdf");
                     byte[] buf = new byte[1];
                     int append = is.read(buf);
@@ -115,6 +118,8 @@ public class ServerExchanges {
                     fos.write(buf);
                     fos.close();
                 }else if(line.equals("E")) {
+                    //ajout de l'élement exercise à la bd
+                    //récupération du fichier et enregistrement
                     line= br.readLine();
                     Exercise exercise = (Exercise) jsonToObject(line);
 
@@ -137,8 +142,30 @@ public class ServerExchanges {
                     fos.close();
                 }else if(line.startsWith("{\"idStudent\"")) {
                     Graduation graduation = (Graduation) jsonToObject(line);
+                    //ajouter le grade à la bd
+                }else if(line.equals("RL")){
+                        line = br.readLine();
+                        //recuperer le path du fichier avec l'id de la lesson présent dans line
+                    String path ="bidon";
+                    sendFile(path,socketOfServer);
+                }else if(line.equals("RE")){
+                    line = br.readLine();
+                    //recuperer le path du fichier avec l'id de l'exercice' présent dans line
+                    String path ="bidon";
+                    sendFile(path,socketOfServer);
+                }else if(line.equals("RW")){
+                    line = br.readLine();
+                    //recuperer le path du fichier avec l'id du travail présent dans line
+                    String path ="bidon";
+                    sendFile(path,socketOfServer);
+                }else if(line.equals("G")) {
+                    Graduation[] grades ={};//recuperer les grades de l'étudiant
+                    for(Graduation grade: grades){
+                        os.write(objectToJson(grade));
+                        os.newLine();
+                        os.flush();
+                    }
                 }
-
                 } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             } catch (IOException ioException) {
@@ -212,5 +239,32 @@ public class ServerExchanges {
             e.printStackTrace();
         }
         return instanceResult;
+    }
+
+    public static void sendFile(String path, Socket socket) {
+        try
+        {
+
+            BufferedOutputStream outFichier = new BufferedOutputStream(socket.getOutputStream());
+
+            try {
+                File file = new File(path);
+                int length =(int) file.length();
+                BufferedInputStream temp = new BufferedInputStream(new FileInputStream(file),length);
+                int len = 0;
+                byte[] tampon = new byte[length];
+                len = temp.read(tampon, 0, length);
+                outFichier.write(tampon, 0, len);
+                outFichier.flush();
+                System.out.println(len + " bytes ont ete envoyes correctement" );
+                //     }
+            }
+            catch
+            (IOException e) {
+                System.out.println("impossible d'ouvrir le fichier" );
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
