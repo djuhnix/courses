@@ -5,7 +5,7 @@
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="448.0" prefWidth="639.0" stylesheets="css/style.css" xmlns="http://javafx.com/javafx/8"
+<AnchorPane prefHeight="448.0" prefWidth="639.0" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="courses.client.controller.LoginController">
     <effect>
         <Blend mode="MULTIPLY"/>
