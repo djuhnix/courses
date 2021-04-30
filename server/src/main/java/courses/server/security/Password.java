@@ -38,9 +38,8 @@ public class Password {
 
     public static String getToken() {
         UUID uuid = UUID.randomUUID();
-        String uuidAsString = uuid.toString();
 
-        return uuidAsString;
+        return uuid.toString();
     }
 
 

@@ -4,8 +4,6 @@ import courses.server.security.RolesEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import javax.persistence.Entity;
-
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="TYPE", discriminatorType=DiscriminatorType.STRING, length=20)
@@ -16,7 +14,7 @@ public class User {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @Basic @Column(name = "EMAIL", nullable = false, length = 50)
+    @Basic @Column(name = "EMAIL", nullable = false, length = 50, unique = true)
     private String email;
 
     @Transient
