@@ -16,19 +16,6 @@ public class ClientExchanges{
         socketOfClient = new Socket(host, port);
         //exchange = new DataExchange();
     }
-    /*
-    public static void main(String[] args){
-        //testToJsonClass test= new testToJsonClass();
-        try{
-            initConnexion("bob","mdp");
-            registrationStrudent("BBI","v","t","rrr","","","","","");
-            //ClientExchanges.sendFile("C:\\Users\\sseba\\OneDrive\\Documents\\cnam\\recherche\\edf\\lettre.pdf");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-     */
 
     public DefaultData<?> initConnexion(String log, String password) throws IOException {
 
@@ -45,58 +32,102 @@ public class ClientExchanges{
         if(data != null && data.isTokenSet()){
             System.out.println("Connexion accepted");
         } else {
-            socketOfClient.close();
+            // TODO close connection
+            // socketOfClient.close();
             System.out.println("Unable to connect");
         }
 
         return data;
     }
 
-    public void registrationStudent( String ine,String fName, String lName, String pemail, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
-        // creating data to be sent
-        DefaultData<Object> data = new DefaultData<>();
-        data.setAction(ActionEnum.POST);
-        data.setDataType(DataTypeEnum.STUDENT);
-        data.setObject(new Object(){
-            public final String INE = ine;
-            public final String firstName = fName;
-            public final String lastName = lName;
-            public final String email = pemail;
-            public final String phoneNumber = phone;
-            public final String addressLine1 = address1;
-            public final String addressLine2 = address2;
-            public final String city = c;
-            public final String zc = zipeCode;
-        });
-        exchange.send();
-    }
-    public void registrationTeacher( String numen,String firstName, String lastName, String email, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
-        sendObject(new Object(){
-            public String NUMEN = numen;
-            public String fname = firstName;
-            public String lName = lastName;
-            public String mail = email;
-            public String phoneNumber = phone;
-            public String addressLine1 = address1;
-            public String addressLine2 = address2;
-            public String city = c;
-            public String zc = zipeCode;
-        });
-
-    }
-
     public void disconnection() throws IOException {
         socketOfClient.close();
     }
 
-    public void addActivity(String n, Date start, Date end, String subj, int idProm) throws IOException {
-        sendObject(new Object(){
-            public final String name = n;
-            public final Date startDate = start;
-            public Date endDate =end;
-            public String subject = subj;
-            public int idPromotion = idProm;
+    public DefaultData<?>  registrationStudent( String INE,String fName, String lName, String pemail, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
+        // creating data to be sent
+        DefaultData<Object> data = new DefaultData<>();
+        data.setAction(ActionEnum.POST);
+        data.setDataType(DataTypeEnum.STUDENT);
+        data.setObject(new Object() {
+            public final String ine = INE;
+            public final String nom = lName;
+            public final String prenom = fName;
+            public final String email = pemail;
+            public final String telephone = phone;
+            public final String adresse1 = address1;
+            public final String adresse2 = address2;
+            public final String ville = c;
+            public final String cp = zipeCode;
         });
+        exchange.setData(data);
+        exchange.send();
+        exchange.receiveData();
+        DefaultData<?> response = exchange.getData();
+        if(response != null) {
+            System.out.println("Student registered success");
+            return response;
+        } else {
+            System.out.println("Error while registering student");
+            return null;
+        }
+    }
+
+    public DefaultData<?> registrationTeacher(String num, String fName, String lName, String pemail, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
+        // creating data to be sent
+        DefaultData<Object> data = new DefaultData<>();
+        data.setAction(ActionEnum.POST);
+        data.setDataType(DataTypeEnum.TEACHER);
+        data.setObject(new Object() {
+            public final String numen = num;
+            public final String nom = lName;
+            public final String prenom = fName;
+            public final String email = pemail;
+            public final String telephone = phone;
+            public final String adresse1 = address1;
+            public final String adresse2 = address2;
+            public final String ville = c;
+            public final String cp = zipeCode;
+        });
+
+        exchange.setData(data);
+        exchange.send();
+        exchange.receiveData();
+        DefaultData<?> response = exchange.getData();
+        if(response != null) {
+            System.out.println("Teacher registered successfully");
+            return response;
+        } else {
+            System.out.println("Error while registering teacher");
+            return null;
+        }
+
+    }
+
+    public DefaultData<?> addActivity(String n, Date startDate, Date endDate, String subj, int idProm, int idProf) throws IOException {
+        // creating data to be sent
+        DefaultData<Object> data = new DefaultData<>();
+        data.setAction(ActionEnum.POST);
+        data.setDataType(DataTypeEnum.ACTIVITY);
+        data.setObject(new Object(){
+            public final String name = n;
+            public final Date start = startDate;
+            public final Date end = endDate;
+            public final String subject = subj;
+            public final int idPromotion = idProm;
+            public final int idTeacher = idProf;
+        });
+        exchange.setData(data);
+        exchange.send();
+        exchange.receiveData();
+        DefaultData<?> response = exchange.getData();
+        if(response != null) {
+            System.out.println("Activity added successfully");
+            return response;
+        } else {
+            System.out.println("Error while registering activity");
+            return null;
+        }
 
 
     }
@@ -226,8 +257,7 @@ public class ClientExchanges{
                 System.out.println(len + " bytes ont ete envoyes correctement" );
                 //     }
             }
-            catch
-            (IOException e) {
+            catch (IOException e) {
                 System.out.println("impossible d'ouvrir le fichier" );
             }
         } catch (IOException e) {

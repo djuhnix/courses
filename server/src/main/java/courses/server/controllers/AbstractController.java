@@ -1,21 +1,30 @@
 package courses.server.controllers;
 
-import com.hazelcast.client.impl.ClientEndpoint;
+import courses.server.dao.AbstractDAO;
 import courses.server.dao.UserDAO;
 import courses.server.entities.User;
 import courses.server.manager.DefaultSecurityManager;
 import courses.server.security.Password;
+import courses.server.security.RolesEnum;
 import courses.utils.DefaultData;
+import jakarta.persistence.NoResultException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 
 public abstract class AbstractController<T> {
     private final UserDAO userDAO;
+    protected AbstractDAO<T> dao;
 
-    AbstractController() {
+    AbstractController(AbstractDAO<T> dao) {
         userDAO = new UserDAO();
+        this.dao = dao;
         DefaultSecurityManager.getInstance().initSecurityUtils();
+    }
+
+    public AbstractController<T> setDao(AbstractDAO<T> dao) {
+        this.dao = dao;
+        return this;
     }
 
     /**
@@ -31,11 +40,18 @@ public abstract class AbstractController<T> {
         }
     }
 
-    public abstract T read(Class<?> type, int id);
     public abstract T read(int id);
-    public abstract boolean post(DefaultData<?> object);
+    public abstract int post(DefaultData<?> object);
     public abstract T update(DefaultData<?> object);
-    public abstract void delete(int id);
+
+    public void delete(int id) {
+        if (isUserAdmin()) {
+            try {
+                dao.delete(dao.findById(id));
+            } catch (NoResultException ignored) {
+            }
+        }
+    }
 
     /**
      * Log the user in the system and a session variable to fetch user info
@@ -70,5 +86,9 @@ public abstract class AbstractController<T> {
             }
         }
         return currentUser;
+    }
+
+    protected boolean isUserAdmin() {
+        return SecurityUtils.getSubject().hasRole(RolesEnum.ADMIN.name());
     }
 }

@@ -4,7 +4,9 @@ public enum DataTypeEnum {
     USER,
     STUDENT,
     TEACHER,
+    ACTIVITY,
     LESSON,
-    EXERCISE,
+    EXERCISE
+    ;
     //other type
 }

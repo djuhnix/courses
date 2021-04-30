@@ -1,13 +1,25 @@
 package courses.server.controllers;
 
+import courses.server.dao.AbstractDAO;
 import courses.server.entities.Exercise;
 import courses.utils.DefaultData;
 
+import java.util.List;
+
 public class ExerciseController extends AbstractController<Exercise> {
 
-    @Override
-    public Exercise read(Class<?> type, int id) {
-        return null;
+    public ExerciseController() {
+        super(new AbstractDAO<>() {
+            @Override
+            public List<Exercise> findAll() {
+                return this.findAll(Exercise.class);
+            }
+
+            @Override
+            public Exercise findById(int id) {
+                return this.findById(id, Exercise.class);
+            }
+        });
     }
 
     @Override
@@ -16,8 +28,8 @@ public class ExerciseController extends AbstractController<Exercise> {
     }
 
     @Override
-    public boolean post(DefaultData<?> object) {
-        return false;
+    public int post(DefaultData<?> object) {
+        return 0;
     }
 
     @Override

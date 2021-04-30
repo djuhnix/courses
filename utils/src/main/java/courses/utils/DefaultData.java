@@ -22,6 +22,12 @@ public class DefaultData<T> implements Serializable {
     private T object = null;
     private String filePath = null;
     private String message;
+    /**
+     * Define request success or failure
+     * - true = success
+     * - false = fail
+     */
+    private boolean requestStatus;
 
     public DefaultData() {
     }
