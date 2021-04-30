@@ -1,4 +1,4 @@
-package entities;
+package courses.server.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,9 +9,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @DiscriminatorValue("student")
 public class Student extends User {
-    @Id @Column(name = "ID", nullable = false)
-    private int id;
-
     @Basic @Column(name = "INE", nullable = false)
     private int ine;
 

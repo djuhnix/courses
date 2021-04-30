@@ -1,4 +1,4 @@
-package entities;
+package courses.server.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,13 +11,11 @@ import java.util.List;
 @DiscriminatorValue("teacher")
 @Data
 public class Teacher extends User {
-    @Id @Column(name = "ID", nullable = false)
-    private int id;
 
     @Basic @Column(name = "NUMEN", nullable = false, length = 26)
     private String numen;
 
-    @OneToMany(mappedBy = "teacher")
+    @OneToMany(mappedBy = "teacher", cascade=CascadeType.PERSIST)
     private List<Activity> activities;
 
     public Teacher(String nom, String prenom, String telephone, String email, String adresse1, String adresse2, String ville, String cp, String numen) {

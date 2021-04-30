@@ -7,17 +7,19 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
         <!-- Enables auto discovery of persistent classes, -->
-        <!-- otherwise they must be listed using <class>-->
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <!-- otherwise they must be listed using <class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>-->
+        <class>courses.server.entities.User</class>
 
         <properties>
             <!-- Login et password [4] -->
-            <property name="javax.persistence.jdbc.password" value="" />
-            <property name="javax.persistence.jdbc.user" value="SA" />
+            <property name="jakarta.persistence.jdbc.password" value="" />
+            <property name="jakarta.persistence.jdbc.user" value="SA" />
 
-            <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver" />
-
-            <property name="javax.persistence.jdbc.url" value="jdbc:hsql:hsql://localhost:9001/courses" />
+            <property name="jakarta.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver" />
+            <!--jdbc:hsqldb:file:src/main/resources/database/mooddb-->
+            <!--jdbc:hsqldb:hsql://localhost:9001/mooddb-->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost:9001/mooddb" />
 
             <property name="eclipselink.logging.level" value="INFO" />
         </properties>
