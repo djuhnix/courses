@@ -1,10 +1,12 @@
 package courses.utils;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DefaultData<T> implements Serializable {
     private String token = null;
     /**
@@ -19,6 +21,7 @@ public class DefaultData<T> implements Serializable {
     private String mdp = null;
     private T object = null;
     private String filePath = null;
+    private String message;
 
     public DefaultData() {
     }

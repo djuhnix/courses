@@ -11,6 +11,19 @@ apply from: 'HSQLDB.gradle'
 
 group 'courses.server'
 
+application {
+    mainClass.set 'courses.server.Server'
+
+    run {
+        classpath = sourceSets.main.runtimeClasspath
+
+        main = getMainClass().get()
+
+        // arguments to pass to the application
+        args gradle.serverPort as String
+    }
+}
+
 repositories {
     mavenCentral()
 }

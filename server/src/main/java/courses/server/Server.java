@@ -14,17 +14,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server {
+    /**
+     *
+     * @param args first arg is the port
+     */
     public static void main(String[] args) {
-        //TODO server main
         try {
-            ServerExchanges.start();
+            ServerExchanges.start(Integer.parseInt(args[0]));
         } catch (IOException e) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, "An error occurred, server stop", e);
             e.printStackTrace();
         }
 
-        //createAdminUser(new UserDAO());
-        //logInAndOutTest(new UserController());
+        /* temp
+         createAdminUser(new UserDAO());
+         logInAndOutTest(new UserController());
+        */
     }
 
     public static void createAdminUser(UserDAO dao) {

@@ -5,6 +5,16 @@ plugins {
 }
 application {
     mainClass.set 'courses.client.App'
+
+    run {
+        classpath = sourceSets.main.runtimeClasspath
+
+        main = getMainClass().get()
+
+        // arguments to pass to the application
+        args gradle.serverPort as String
+        args gradle.serverHost as String
+    }
 }
 
 javafx {
@@ -26,9 +36,14 @@ jlink {
 }
 
 dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    implementation project(':utils')
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    implementation project(':utils')
 }
 
 test {

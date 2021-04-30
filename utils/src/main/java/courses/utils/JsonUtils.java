@@ -27,7 +27,7 @@ public class JsonUtils {
         try {
             instanceResult = mapper.readValue(json, objectClass);
         } catch (IOException e) {
-            Logger.getLogger(JsonUtils.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(JsonUtils.class.getName()).log(Level.SEVERE, e.getMessage(), e);
             e.printStackTrace();
         }
         return instanceResult;

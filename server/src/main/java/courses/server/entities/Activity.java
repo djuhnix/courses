@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Activity extends Aggregator {
+public class Activity {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
     private String name;
