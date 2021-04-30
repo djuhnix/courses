@@ -36,6 +36,10 @@ public class DataExchange implements Serializable {
             data = JsonUtils.jsonToObject(line, DefaultData.class);
 
             Logger.getLogger(getClass().getName()).log(Level.INFO, "Data received");
+            if (data.getFilePath() != null) {
+                saveFile(data.getFilePath());
+                Logger.getLogger(getClass().getName()).log(Level.INFO, "File saved");
+            }
         } catch (JsonMappingException e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Wrong data type given", e);
             e.printStackTrace();

@@ -6,10 +6,20 @@ import courses.server.security.Password;
 import courses.utils.DefaultData;
 import jakarta.persistence.NoResultException;
 
+import java.util.List;
+
 public class UserController extends AbstractController<User> {
 
     public UserController() {
         super(new UserDAO());
+    }
+
+    @Override
+    public List<User> read() throws IllegalAccessException {
+        if (isUserAdmin()) {
+            return super.read();
+        }
+        throw new IllegalAccessException("Unable to read data : lacks of permission");
     }
 
     @Override

@@ -12,6 +12,10 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public abstract class AbstractController<T> {
     private final UserDAO userDAO;
     protected AbstractDAO<T> dao;
@@ -44,6 +48,15 @@ public abstract class AbstractController<T> {
     public abstract int post(DefaultData<?> object);
     public abstract T update(DefaultData<?> object);
 
+    public List<T> read() throws IllegalAccessException {
+        List<T> result = null;
+        try {
+            result = dao.findAll();
+        } catch (NoResultException ignored) {
+        }
+        return result;
+    }
+
     public void delete(int id) {
         if (isUserAdmin()) {
             try {
@@ -70,22 +83,29 @@ public abstract class AbstractController<T> {
                 currentUser.getSession().setAttribute("user", userDAO.findByEmail(email));
                 currentUser.getSession().setAttribute("token", Password.getToken());
             } catch (UnknownAccountException uae) {
-                System.err.println("Username Not Found!");
                 currentUser = null;
+                logError("Username Not Found!", uae);
                 uae.printStackTrace();
             } catch (IncorrectCredentialsException ice) {
-                System.err.println("Invalid Credentials!");
+                logError("Invalid Credentials!", ice);
                 ice.printStackTrace();
             } catch (LockedAccountException lae) {
-                System.err.println("Your Account is Locked!");
+                logError("Your Account is Locked!", lae);
                 lae.printStackTrace();
             } catch (AuthenticationException ae) {
-                System.err.println("Unexpected Error!");
                 currentUser = null;
+                logError("Unexpected Error!", ae);
                 ae.printStackTrace();
             }
         }
         return currentUser;
+    }
+
+    protected void logError(String msg, Exception e) {
+        Logger.getLogger(getClass().getName()).log(Level.SEVERE, msg, e);
+    }
+    protected void logInfo(String msg) {
+        Logger.getLogger(getClass().getName()).log(Level.INFO, msg);
     }
 
     protected boolean isUserAdmin() {

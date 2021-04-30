@@ -24,6 +24,15 @@ application {
     }
 }
 
+task createAdmin(type: JavaExec) {
+    group = "develop"
+    description = "Create admin user in database with creds : admin:pass"
+    mustRunAfter tasks.createDatabaseTable
+
+    classpath = sourceSets.main.runtimeClasspath
+    main = "courses.server.tasks.CreateAdmin"
+}
+
 repositories {
     mavenCentral()
 }
