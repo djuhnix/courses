@@ -6,7 +6,7 @@ public enum DataTypeEnum {
     TEACHER,
     ACTIVITY,
     LESSON,
-    EXERCISE
-    ;
+    EXERCISE,
+    GRADE
     //other type
 }

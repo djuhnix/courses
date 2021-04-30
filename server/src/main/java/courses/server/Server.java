@@ -25,39 +25,5 @@ public class Server {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, "An error occurred, server stop", e);
             e.printStackTrace();
         }
-
-        /* temp
-         createAdminUser(new UserDAO());
-         logInAndOutTest(new UserController());
-        */
-    }
-
-    public static void createAdminUser(UserDAO dao) {
-        User user = new User();
-        user.setNom("nom");
-        user.setPrenom("prenom");
-        user.setEmail("email");
-        user.setRole(RolesEnum.ADMIN);
-        Password.saveHashedPassword(user, "password");
-        dao.save(user);
-        System.out.println("user saved");
-    }
-
-    public static void logInAndOutTest(UserController controller) {
-        Subject currentUser = controller.logUser("email", "password");
-        if (currentUser.isAuthenticated()) {
-            System.out.println("user logged in");
-            if (currentUser.hasRole(RolesEnum.ADMIN.name())) {
-                System.out.println("I'm an admin");
-            }
-            User user = (User) currentUser.getSession().getAttribute("user");
-            System.out.println("User lastname : " + user.getNom());
-        } else {
-            System.out.println("log in failed");
-            System.exit(0);
-        }
-        currentUser.logout();
-        //if (currentUser.is)
-        System.out.println("user logged out");
     }
 }

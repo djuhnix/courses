@@ -36,9 +36,4 @@ public class ExerciseController extends AbstractController<Exercise> {
     public Exercise update(DefaultData<?> object) {
         return null;
     }
-
-    @Override
-    public void delete(int id) {
-
-    }
 }

@@ -17,6 +17,7 @@ public class User {
     @Basic @Column(name = "EMAIL", nullable = false, length = 50)
     private String email;
 
+    @Transient
     private String password;
 
     @Basic @Column(name = "PASSWORD_HASH", nullable = false)

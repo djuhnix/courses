@@ -89,18 +89,33 @@ class ServiceThread extends Thread {
     private void executeControllerOnAction(DefaultData<Object> response, DefaultData<?> data, AbstractController<?> controller) {
         switch (data.getAction()) {
             case INIT -> {
-                response.setMessage("Connecté");
+                response.setMessage("Connected");
                 response.setRequestStatus(true);
             }
             case READ -> {
-                Object readResult = controller.read((int) data.getObject());
-                response.setObject(readResult);
+                Object readResult;
+                if (data.getObject() != null) {
+                    readResult = controller.read((int) data.getObject());
+                    response.setObject(readResult);
+                } else {
+                    try {
+                        readResult = controller.read();
+                        response.setObject(readResult);
+                    } catch (IllegalAccessException e) {
+                        readResult = null;
+                        response.setRequestStatus(false);
+                        response.setMessage("User not permitted to realise action");
+                        e.printStackTrace();
+                    }
+                }
                 if (readResult == null) {
                     response.setRequestStatus(false);
-                    response.setMessage("Lecture impossible : aucun résultat trouvé");
+                    if (response.getMessage() != null) {
+                        response.setMessage("Unable to read " + data.getDataType() + " : no result in request");
+                    }
                 } else {
                     response.setRequestStatus(true);
-                    response.setMessage("Lecture réussie");
+                    response.setMessage("Read " + data.getDataType() + " success");
                 }
             }
             case POST -> {
@@ -109,10 +124,10 @@ class ServiceThread extends Thread {
 
                 if (postResult == 0) {
                     response.setRequestStatus(false);
-                    response.setMessage("Création échoué");
+                    response.setMessage("Unable to create " + data.getDataType());
                 } else {
                     response.setRequestStatus(true);
-                    response.setMessage("Création réussie");
+                    response.setMessage("Create " + data.getDataType() + " success");
                 }
             }
             case UPDATE -> {
@@ -121,16 +136,16 @@ class ServiceThread extends Thread {
 
                 if (updateResult == null) {
                     response.setRequestStatus(false);
-                    response.setMessage("Mise à jour échoué : aucun résultat trouvé");
+                    response.setMessage("Unable to update " + data.getDataType() + " : no result in request");
                 } else {
                     response.setRequestStatus(true);
-                    response.setMessage("Mise à jour réussie");
+                    response.setMessage("Create " + data.getDataType() + " success");
                 }
             }
             case DELETE -> {
                 controller.delete((int) data.getObject());
                 response.setRequestStatus(true);
-                response.setMessage("Suppression réussie");
+                response.setMessage("Delete success");
             }
             default -> log("Action not found : " + data.getAction());// + ", stopping..."
             //System.exit(0);
