@@ -9,6 +9,14 @@
         <!-- Enables auto discovery of persistent classes, -->
         <!-- otherwise they must be listed using <class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>-->
+        <class>courses.server.entities.Activity</class>
+        <class>courses.server.entities.Admin</class>
+        <class>courses.server.entities.Exercise</class>
+        <class>courses.server.entities.Graduation</class>
+        <class>courses.server.entities.Lesson</class>
+        <class>courses.server.entities.Promotion</class>
+        <class>courses.server.entities.Student</class>
+        <class>courses.server.entities.Teacher</class>
         <class>courses.server.entities.User</class>
 
         <properties>

@@ -23,7 +23,7 @@ public class Activity {
     private String subject;
 
     @ManyToOne
-    private Promotion promo;
+    private Promotion promotion;
 
     @ManyToOne
     private Teacher teacher;
@@ -46,7 +46,7 @@ public class Activity {
         this.start = start;
         this.end = end;
         this.subject = subject;
-        this.promo = promo;
+        this.promotion = promo;
         this.teacher = teacher;
     }
 

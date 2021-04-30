@@ -14,7 +14,7 @@ public class User {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @Basic @Column(name = "EMAIL", nullable = false, length = 50)
+    @Basic @Column(name = "EMAIL", nullable = false, length = 50, unique = true)
     private String email;
 
     @Transient

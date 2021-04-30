@@ -72,11 +72,11 @@ public abstract class AbstractController<T> {
      * @param password password
      */
     public Subject logUser(String email, String password) {
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "Trying to log user : " + email + ":" + password);
         Subject currentUser = SecurityUtils.getSubject();
         UsernamePasswordToken token;
         if (!currentUser.isAuthenticated()) {
-            token
-                    = new UsernamePasswordToken(email, password);
+            token = new UsernamePasswordToken(email, password);
             //token.setRememberMe(true);
             try {
                 currentUser.login(token);
@@ -84,26 +84,23 @@ public abstract class AbstractController<T> {
                 currentUser.getSession().setAttribute("token", Password.getToken());
             } catch (UnknownAccountException uae) {
                 currentUser = null;
-                logError("Username Not Found!", uae);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Username Not Found!", uae);
                 uae.printStackTrace();
             } catch (IncorrectCredentialsException ice) {
-                logError("Invalid Credentials!", ice);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Invalid Credentials!", ice);
                 ice.printStackTrace();
             } catch (LockedAccountException lae) {
-                logError("Your Account is Locked!", lae);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Your Account is Locked!", lae);
                 lae.printStackTrace();
             } catch (AuthenticationException ae) {
                 currentUser = null;
-                logError("Unexpected Error!", ae);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unexpected Error!", ae);
                 ae.printStackTrace();
             }
         }
         return currentUser;
     }
 
-    protected void logError(String msg, Exception e) {
-        Logger.getLogger(getClass().getName()).log(Level.SEVERE, msg, e);
-    }
     protected void logInfo(String msg) {
         Logger.getLogger(getClass().getName()).log(Level.INFO, msg);
     }
