@@ -1,5 +1,6 @@
 package courses.client;
 
+import courses.client.api.ClientExchanges;
 import courses.client.manager.LoginManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +14,13 @@ import java.util.Objects;
 //fx:controller="courses.client.controller.Home"
 public class App extends Application {
 
-    public static void main(String[] args) throws IOException {
+    private static String server;
+    private static int port;
+
+    public static void main(String[] args) {
         System.out.println("Application started ! ");
+        port = Integer.parseInt(args[0]);
+        server = args[1];
         Application.launch(args);
     }
 
@@ -27,7 +33,8 @@ public class App extends Application {
         );
          */
         Scene scene = new Scene(new StackPane());
-        LoginManager loginManager = new LoginManager(scene);
+        ClientExchanges exchanges = new ClientExchanges(server, port);
+        LoginManager loginManager = new LoginManager(scene, exchanges);
         loginManager.showLoginScreen();
 
         primaryStage.setScene(scene);

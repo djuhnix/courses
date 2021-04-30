@@ -3,18 +3,20 @@ package courses.client.manager;
 import java.io.IOException;
 import java.util.logging.*;
 
+import courses.client.api.ClientExchanges;
 import courses.client.controller.HomeController;
 import courses.client.controller.LoginController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 
 /** Manages control flow for logins */
-public class LoginManager {
+public class LoginManager extends AbstractManager {
     public static final String LOGIN_FXML = "/courses/client/login.fxml";
     public static final String HOME_FXML = "/courses/client/home.fxml";
     private final Scene scene;
 
-    public LoginManager(Scene scene) {
+    public LoginManager(Scene scene, ClientExchanges exchanges) {
+        super(exchanges);
         this.scene = scene;
     }
 
@@ -22,8 +24,8 @@ public class LoginManager {
      * Callback method invoked to notify that a user has been authenticated.
      * Will show the main application screen.
      */
-    public void authenticated(String sessionID) {
-        showHomeScreen(sessionID);
+    public void authenticated(String token) {
+        showHomeScreen(token);
     }
 
     /**

@@ -1,9 +1,12 @@
 package courses.client.controller;
 
 import courses.client.manager.LoginManager;
+import courses.utils.DefaultData;
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import java.io.IOException;
 
 /** Controls the login screen */
 public class LoginController {
@@ -19,9 +22,11 @@ public class LoginController {
     public void initManager(final LoginManager loginManager) {
         submit.setOnAction(
                 event -> {
-                    String sessionID = authorize();
-                    if (sessionID != null) {
-                        loginManager.authenticated(sessionID);
+                    String token = authorize(loginManager);
+                    if (token != null) {
+                        loginManager.authenticated(token);
+                    } else {
+                        error.setText("Une erreur est survenue, réessayez");
                     }
                 });
     }
@@ -32,11 +37,18 @@ public class LoginController {
      * If accepted, return a sessionID for the authorized session
      * otherwise, return null.
      */
-    private String authorize() {
-        return
-                "open".equals(user.getText()) && "sesame".equals(password.getText())
-                        ? generateSessionID()
-                        : null;
+    private String authorize(LoginManager loginManager) {
+        DefaultData<?> data = null;
+        try {
+            data = loginManager.getClientExchanges().initConnexion(user.getText(), password.getText());
+            if (data.getMessage() != null) {
+                error.setText(data.getMessage());
+            }
+        } catch (IOException e) {
+            error.setText("Une erreur est survenue");
+            e.printStackTrace();
+        }
+        return data != null ? data.getToken() : null;
     }
 
     private static int sessionID = 0;

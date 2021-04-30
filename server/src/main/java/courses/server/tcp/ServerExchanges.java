@@ -1,15 +1,18 @@
 package courses.server.tcp;
 
+import org.apache.shiro.SecurityUtils;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerExchanges {
 
-    public static void start() throws IOException {
+    public static void start(int port) throws IOException {
 
         ServerSocket listener = null;
 
+        System.out.println("Listening on port "  + port);
         System.out.println("Server is waiting to accept user...");
         int clientNumber = 0;
 
@@ -18,22 +21,25 @@ public class ServerExchanges {
         // privileged users (root)
 
         try {
-            listener = new ServerSocket(7777);
+            listener = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
 
         try {
-            //noinspection InfiniteLoopStatement
-            while (true) {
+            Socket socketOfServer;
+            do {
                 // Accept client connection request
                 // Get new Socket at Server.
 
-                Socket socketOfServer = listener.accept();
+                socketOfServer = listener.accept();
                 new ServiceThread(socketOfServer, clientNumber++).start();
-            }
+            } while (socketOfServer.isConnected());
         } finally {
+            if (SecurityUtils.getSubject().isAuthenticated()) {
+                SecurityUtils.getSubject().logout();
+            }
             listener.close();
         }
 

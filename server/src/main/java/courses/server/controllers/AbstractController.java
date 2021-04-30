@@ -4,6 +4,7 @@ import com.hazelcast.client.impl.ClientEndpoint;
 import courses.server.dao.UserDAO;
 import courses.server.entities.User;
 import courses.server.manager.DefaultSecurityManager;
+import courses.server.security.Password;
 import courses.utils.DefaultData;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -43,14 +44,18 @@ public abstract class AbstractController<T> {
      */
     public Subject logUser(String email, String password) {
         Subject currentUser = SecurityUtils.getSubject();
+        UsernamePasswordToken token;
         if (!currentUser.isAuthenticated()) {
-            UsernamePasswordToken token
+            token
                     = new UsernamePasswordToken(email, password);
             //token.setRememberMe(true);
             try {
                 currentUser.login(token);
+                currentUser.getSession().setAttribute("user", userDAO.findByEmail(email));
+                currentUser.getSession().setAttribute("token", Password.getToken());
             } catch (UnknownAccountException uae) {
                 System.err.println("Username Not Found!");
+                currentUser = null;
                 uae.printStackTrace();
             } catch (IncorrectCredentialsException ice) {
                 System.err.println("Invalid Credentials!");
@@ -60,10 +65,10 @@ public abstract class AbstractController<T> {
                 lae.printStackTrace();
             } catch (AuthenticationException ae) {
                 System.err.println("Unexpected Error!");
+                currentUser = null;
                 ae.printStackTrace();
             }
         }
-        currentUser.getSession().setAttribute("user", userDAO.findByEmail(email));
         return currentUser;
     }
 }
