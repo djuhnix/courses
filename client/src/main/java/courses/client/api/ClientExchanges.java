@@ -15,7 +15,7 @@ public class ClientExchanges {
 
     public ClientExchanges(String host, int port) throws IOException {
         socketOfClient = new Socket(host, port);
-        //exchange = new DataExchange();
+        exchange = new DataExchange(socketOfClient, false);
     }
 
     public DefaultData<?> initConnexion(String log, String password) throws IOException {
@@ -46,13 +46,13 @@ public class ClientExchanges {
         socketOfClient.close();
     }
 
-    public DefaultData<?>  registrationStudent( String INE,String fName, String lName, String pemail, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
+    public DefaultData<?>  registrationStudent(int INE,String fName, String lName, String pemail, String phone, String address1, String address2, String c, String zipeCode, String pass) throws IOException {
         // creating data to be sent
         DefaultData<Object> data = new DefaultData<>();
-        data.setAction(ActionEnum.POST);
+        data.setAction(ActionEnum.SIGN_IN);
         data.setDataType(DataTypeEnum.STUDENT);
         data.setObject(new Object() {
-            public final String ine = INE;
+            public final int ine = INE;
             public final String nom = lName;
             public final String prenom = fName;
             public final String email = pemail;
@@ -61,17 +61,18 @@ public class ClientExchanges {
             public final String adresse2 = address2;
             public final String ville = c;
             public final String cp = zipeCode;
+            public final String password = pass;
         });
         return sendData(data, "Student registered success", "Error while registering student");
     }
 
-    public DefaultData<?> registrationTeacher(String num, String fName, String lName, String pemail, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
+    public DefaultData<?> registrationTeacher(int num, String fName, String lName, String pemail, String phone, String address1, String address2, String c, String zipeCode, String pass) throws IOException {
         // creating data to be sent
         DefaultData<Object> data = new DefaultData<>();
-        data.setAction(ActionEnum.POST);
+        data.setAction(ActionEnum.SIGN_IN);
         data.setDataType(DataTypeEnum.TEACHER);
         data.setObject(new Object() {
-            public final String numen = num;
+            public final int numen = num;
             public final String nom = lName;
             public final String prenom = fName;
             public final String email = pemail;
@@ -80,6 +81,7 @@ public class ClientExchanges {
             public final String adresse2 = address2;
             public final String ville = c;
             public final String cp = zipeCode;
+            public final String password = pass;
         });
 
         return sendData(data, "Teacher registered successfully", "Error while registering teacher");

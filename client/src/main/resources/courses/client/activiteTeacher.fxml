@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="courses.client.controller.ActiviteTeacherController">
+   <children>
+      <ToolBar prefHeight="40.0" prefWidth="600.0">
+        <items>
+          <Button mnemonicParsing="false" text="retour" />
+            <Button mnemonicParsing="false" text="déconnexion" />
+        </items>
+         <padding>
+            <Insets left="450.0" />
+         </padding>
+      </ToolBar>
+      <Label layoutX="270.0" layoutY="63.0" text="Activité">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TableView layoutX="8.0" layoutY="141.0" prefHeight="152.0" prefWidth="276.0">
+        <columns>
+          <TableColumn prefWidth="200" text="nom" />
+          <TableColumn prefWidth="75.0" text="fichier" />
+        </columns>
+      </TableView>
+      <TableView layoutX="310.0" layoutY="141.0" prefHeight="152.0" prefWidth="276.0">
+        <columns>
+          <TableColumn prefWidth="200" text="nom" />
+          <TableColumn prefWidth="75.0" text="fichier" />
+        </columns>
+      </TableView>
+      <Label layoutX="128.0" layoutY="112.0" text="Leçons" />
+      <Label layoutX="424.0" layoutY="112.0" text="Exercices" />
+   </children>
+</AnchorPane>

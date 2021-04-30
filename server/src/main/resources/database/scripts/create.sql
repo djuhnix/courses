@@ -34,7 +34,7 @@ DROP TABLE IF EXISTS student;
 CREATE TABLE IF NOT EXISTS student (
     id int NOT NULL,
     INE int NOT NULL,
-    id_promotion int NOT NULL,
+    id_promotion int,
     PRIMARY KEY (id),
     FOREIGN KEY (id)
         REFERENCES user (id),

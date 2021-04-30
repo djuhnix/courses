@@ -1,7 +1,7 @@
 package courses.server.controllers;
 
 import courses.server.dao.AbstractDAO;
-import courses.server.entities.Student;
+import courses.server.entities.Teacher;
 import courses.server.security.Password;
 import courses.utils.ActionEnum;
 import courses.utils.DefaultData;
@@ -9,24 +9,24 @@ import jakarta.persistence.NoResultException;
 
 import java.util.List;
 
-public class StudentController extends AbstractController<Student> {
+public class TeacherController extends AbstractController<Teacher> {
 
-    public StudentController() {
+    public TeacherController() {
         super(new AbstractDAO<>() {
             @Override
-            public List<Student> findAll() {
-                return this.findAll(Student.class);
+            public List<Teacher> findAll() {
+                return this.findAll(Teacher.class);
             }
             @Override
-            public Student findById(int id) {
-                return this.findById(id, Student.class);
+            public Teacher findById(int id) {
+                return this.findById(id, Teacher.class);
             }
         });
     }
 
     @Override
-    public Student read(int id) {
-        Student result = null;
+    public Teacher read(int id) {
+        Teacher result = null;
         if (isUserAdmin()) {
             try {
                 result = dao.findById(id);
@@ -38,30 +38,30 @@ public class StudentController extends AbstractController<Student> {
 
     @Override
     public int post(DefaultData<?> object) throws IllegalAccessException {
-        Student student = Student.getFrom(object.getObject());
-        int id = 0;
+        Teacher teacher = Teacher.getFrom(object.getObject());
+        int id;
         if (object.getAction() != ActionEnum.SIGN_IN && !isUserAdmin()) {
             throw new IllegalAccessException("Unable to read data : lacks of permission");
         }
-        Password.saveHashedPassword(student, student.getPassword());
-        dao.save(student);
-        id = student.getId();
+        Password.saveHashedPassword(teacher, teacher.getPassword());
+        dao.save(teacher);
+        id = teacher.getId();
         return id;
     }
 
     @Override
-    public Student update(DefaultData<?> object) {
-        Student upStudent = Student.getFrom(object.getObject());
+    public Teacher update(DefaultData<?> object) {
+        Teacher upTeacher = Teacher.getFrom(object.getObject());
         if (isUserAdmin()) {
             try {
-                Student actual = dao.findById(upStudent.getId());
-                if (!actual.equals(upStudent)) {
-                    upStudent = dao.update(upStudent);
+                Teacher actual = dao.findById(upTeacher.getId());
+                if (!actual.equals(upTeacher)) {
+                    upTeacher = dao.update(upTeacher);
                 }
             } catch (NoResultException ignored) {
             }
         }
-        return upStudent;
+        return upTeacher;
     }
 
 }

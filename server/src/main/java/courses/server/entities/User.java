@@ -1,6 +1,7 @@
 package courses.server.entities;
 
 import courses.server.security.RolesEnum;
+import courses.utils.JsonUtils;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -66,5 +67,9 @@ public class User {
         this.adresse2 = adresse2;
         this.ville = ville;
         this.cp = cp;
+    }
+
+    public static User getFrom(Object o) {
+        return JsonUtils.mapObject(o, User.class);
     }
 }

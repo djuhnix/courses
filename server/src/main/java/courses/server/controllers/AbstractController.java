@@ -45,7 +45,7 @@ public abstract class AbstractController<T> {
     }
 
     public abstract T read(int id);
-    public abstract int post(DefaultData<?> object);
+    public abstract int post(DefaultData<?> object) throws IllegalAccessException;
     public abstract T update(DefaultData<?> object);
 
     public List<T> read() throws IllegalAccessException {

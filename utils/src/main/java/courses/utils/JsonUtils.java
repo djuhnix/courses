@@ -21,6 +21,11 @@ public class JsonUtils {
         return json;
     }
 
+    public static <T> T mapObject(Object object, Class<T> mapType) {
+        final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+        return mapper.convertValue(object, mapType);
+    }
+
     public static <T> T jsonToObject(String json, Class<T> objectClass) throws JsonMappingException {
         ObjectMapper mapper = new ObjectMapper();
         T instanceResult = null;
