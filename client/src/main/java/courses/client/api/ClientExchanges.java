@@ -32,7 +32,7 @@ public class ClientExchanges{
 
     public DefaultData<?> initConnexion(String log, String password) throws IOException {
 
-        //Converting the Object to JSONString
+        // creating data to be sent
         DefaultData<?> data = new DefaultData<>();
         data.setAuth(log, password);
         data.setAction(ActionEnum.INIT);
@@ -52,19 +52,23 @@ public class ClientExchanges{
         return data;
     }
 
-    public void registrationStrudent( String ine,String firstName, String lastName, String email, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
-        sendObject( new Object(){
+    public void registrationStudent( String ine,String firstName, String lastName, String email, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
+        // creating data to be sent
+        DefaultData<Object> data = new DefaultData<>();
+        data.setAction(ActionEnum.POST);
+        data.setDataType(DataTypeEnum.STUDENT);
+        data.setObject(new Object(){
             public final String INE = ine;
-            public String fname = firstName;
-            public String lName = lastName;
-            public String mail = email;
-            public String phoneNumber = phone;
-            public String addressLine1 = address1;
-            public String addressLine2 = address2;
-            public String city = c;
-            public String zc = zipeCode;
+            public final String fname = firstName;
+            public final String lName = lastName;
+            public final String mail = email;
+            public final String phoneNumber = phone;
+            public final String addressLine1 = address1;
+            public final String addressLine2 = address2;
+            public final String city = c;
+            public final String zc = zipeCode;
         });
-
+        exchange.send();
     }
     public void registrationTeacher( String numen,String firstName, String lastName, String email, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
         sendObject(new Object(){
@@ -184,7 +188,12 @@ public class ClientExchanges{
         fos.write(buf);
     }
 
-    public void sendObject(Object objectToSend) throws IOException {
+    private void sendObject(Object objectToSend) throws IOException {
+        DefaultData<?> data = new DefaultData<>();
+        data.setAction(ActionEnum.INIT);
+        data.setDataType(DataTypeEnum.USER);
+        exchange = new DataExchange(socketOfClient, data);
+        exchange.send();
         // Create output stream at the socketOfClient (to send data to the server)
         BufferedWriter os = new BufferedWriter(new OutputStreamWriter(socketOfClient.getOutputStream()));
 
