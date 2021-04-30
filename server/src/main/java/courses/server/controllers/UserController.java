@@ -52,7 +52,7 @@ public class UserController extends AbstractController<User> {
 
     @Override
     public int post(DefaultData<?> object) {
-        User user = (User) object.getObject();
+        User user = User.getFrom(object.getObject());
         int id = 0;
         if (isUserAdmin()) {
             Password.saveHashedPassword(user, user.getPassword());

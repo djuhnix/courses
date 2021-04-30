@@ -37,9 +37,10 @@ public class ServerExchanges {
                 new ServiceThread(socketOfServer, clientNumber++).start();
             } while (socketOfServer.isConnected());
         } finally {
-            if (SecurityUtils.getSubject().isAuthenticated()) {
+            /*
+            if (SecurityUtils.getSecurityManager() != null && SecurityUtils.getSubject().isAuthenticated()) {
                 SecurityUtils.getSubject().logout();
-            }
+            }*/
             listener.close();
         }
 

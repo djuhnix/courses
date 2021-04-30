@@ -6,17 +6,18 @@ import java.util.logging.*;
 import courses.client.api.ClientExchanges;
 import courses.client.controller.HomeController;
 import courses.client.controller.LoginController;
+import courses.client.controller.SignInController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 
 /** Manages control flow for logins */
 public class LoginManager extends AbstractManager {
+    public static final String SIGN_IN_FXML = "/courses/client/signIn.fxml";
     public static final String LOGIN_FXML = "/courses/client/login.fxml";
     public static final String HOME_FXML = "/courses/client/home.fxml";
-    private final Scene scene;
 
     public LoginManager(Scene scene, ClientExchanges exchanges) {
-        super(exchanges);
+        super(scene, exchanges);
         this.scene = scene;
     }
 
@@ -46,7 +47,7 @@ public class LoginManager extends AbstractManager {
                     loader.getController();
             controller.initManager(this);
         } catch (IOException ex) {
-            Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, "Error : unable to show login screen", ex);
         }
     }
 
@@ -59,6 +60,20 @@ public class LoginManager extends AbstractManager {
             HomeController controller =
                     loader.getController();
             controller.initSessionID(this, sessionID);
+        } catch (IOException ex) {
+            Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void showRegisterView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(SIGN_IN_FXML)
+            );
+            scene.setRoot(loader.load());
+            SignInController controller =
+                    loader.getController();
+            controller.initManager(new SignInManager(scene, clientExchanges));
         } catch (IOException ex) {
             Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -1,25 +1,25 @@
 package courses.client.controller;
 
+import courses.client.manager.AbstractManager;
 import courses.client.manager.LoginManager;
 import courses.utils.DefaultData;
-import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.IOException;
 
 /** Controls the login screen */
-public class LoginController {
+public class LoginController extends AbstractController {
     @FXML public Button submit;
     @FXML public Label error;
     @FXML public Button register;
-    @FXML public Button quit;
     @FXML private TextField user;
     @FXML private TextField password;
 
     public void initialize() {}
 
-    public void initManager(final LoginManager loginManager) {
+    public void initManager(final AbstractManager manager) {
+        LoginManager loginManager = (LoginManager) manager;
         submit.setOnAction(
                 event -> {
                     String token = authorize(loginManager);
@@ -29,6 +29,10 @@ public class LoginController {
                         error.setText("Une erreur est survenue, réessayez");
                     }
                 });
+
+        register.setOnAction(event -> {
+            loginManager.showRegisterView();
+        });
     }
 
     /**
