@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 
 import java.io.Serializable;
 
-public class GraduationPK implements Serializable {
+public class GraduationPK implements Serializable{
     private int idStudent;
     private int idActivity;
 

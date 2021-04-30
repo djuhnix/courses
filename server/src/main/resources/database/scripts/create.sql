@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS user (
     nom varchar(25) NOT NULL,
     prenom varchar(25) NOT NULL,
     telephone varchar(25),
-    email varchar(50) NOT NULL,
+    email varchar(50) NOT NULL UNIQUE,
     adresse1 varchar(25),
     adresse2 varchar(25),
     ville varchar(25),
