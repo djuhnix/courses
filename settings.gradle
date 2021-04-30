@@ -1,6 +1,11 @@
 rootProject.name = 'courses'
 include 'server'
 include 'client'
+include 'utils'
+
+//// server
+gradle.ext.serverPort = 7777
+gradle.ext.serverHost = 'localhost'
 
 //// database
 

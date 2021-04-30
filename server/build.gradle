@@ -11,6 +11,28 @@ apply from: 'HSQLDB.gradle'
 
 group 'courses.server'
 
+application {
+    mainClass.set 'courses.server.Server'
+
+    run {
+        classpath = sourceSets.main.runtimeClasspath
+
+        main = getMainClass().get()
+
+        // arguments to pass to the application
+        args gradle.serverPort as String
+    }
+}
+
+task createAdmin(type: JavaExec) {
+    group = "develop"
+    description = "Create admin user in database with creds : admin:pass"
+    mustRunAfter tasks.createDatabaseTable
+
+    classpath = sourceSets.main.runtimeClasspath
+    main = "courses.server.tasks.CreateAdmin"
+}
+
 repositories {
     mavenCentral()
 }
@@ -26,6 +48,7 @@ dependencies {
     implementation group: 'org.apache.shiro', name: 'shiro-all', version: '1.7.1'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+    implementation project(':utils')
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'

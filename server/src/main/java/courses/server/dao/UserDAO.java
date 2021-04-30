@@ -1,7 +1,6 @@
 package courses.server.dao;
 
 import courses.server.entities.User;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;

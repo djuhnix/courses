@@ -3,16 +3,20 @@ package courses.client.manager;
 import java.io.IOException;
 import java.util.logging.*;
 
+import courses.client.api.ClientExchanges;
 import courses.client.controller.HomeController;
 import courses.client.controller.LoginController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 
 /** Manages control flow for logins */
-public class LoginManager {
+public class LoginManager extends AbstractManager {
+    public static final String LOGIN_FXML = "/courses/client/login.fxml";
+    public static final String HOME_FXML = "/courses/client/home.fxml";
     private final Scene scene;
 
-    public LoginManager(Scene scene) {
+    public LoginManager(Scene scene, ClientExchanges exchanges) {
+        super(exchanges);
         this.scene = scene;
     }
 
@@ -20,8 +24,8 @@ public class LoginManager {
      * Callback method invoked to notify that a user has been authenticated.
      * Will show the main application screen.
      */
-    public void authenticated(String sessionID) {
-        showMainView(sessionID);
+    public void authenticated(String token) {
+        showHomeScreen(token);
     }
 
     /**
@@ -35,7 +39,7 @@ public class LoginManager {
     public void showLoginScreen() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("login.fxml")
+                    getClass().getResource(LOGIN_FXML)
             );
             scene.setRoot(loader.load());
             LoginController controller =
@@ -46,10 +50,10 @@ public class LoginManager {
         }
     }
 
-    private void showMainView(String sessionID) {
+    private void showHomeScreen(String sessionID) {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("home.fxml")
+                    getClass().getResource(HOME_FXML)
             );
             scene.setRoot(loader.load());
             HomeController controller =
