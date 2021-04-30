@@ -52,16 +52,16 @@ public class ClientExchanges{
         return data;
     }
 
-    public void registrationStudent( String ine,String firstName, String lastName, String email, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
+    public void registrationStudent( String ine,String fName, String lName, String pemail, String phone, String address1, String address2, String c, String zipeCode) throws IOException {
         // creating data to be sent
         DefaultData<Object> data = new DefaultData<>();
         data.setAction(ActionEnum.POST);
         data.setDataType(DataTypeEnum.STUDENT);
         data.setObject(new Object(){
             public final String INE = ine;
-            public final String fname = firstName;
-            public final String lName = lastName;
-            public final String mail = email;
+            public final String firstName = fName;
+            public final String lastName = lName;
+            public final String email = pemail;
             public final String phoneNumber = phone;
             public final String addressLine1 = address1;
             public final String addressLine2 = address2;
